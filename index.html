@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鉄道完乗管理アプリ - Koh Edition</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js 本体に続けて追加 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+    <style>
+        body { font-family: sans-serif; margin: 15px; background-color: #f0f2f5; color: #333; line-height: 1.4; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1 { text-align: center; color: #007bff; font-size: 22px; margin-bottom: 20px; }
+        
+        /* タブ切り替え */
+        .tab-container { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab-button { flex: 1; padding: 15px 10px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: #e9ecef; color: #666; font-size: 14px; }
+        .tab-button.active { background: #007bff; color: white; }
+
+        /* 入力フォーム（モバイル最適化） */
+        .input-group { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; }
+        .input-group p { margin: 12px 0 6px; font-weight: bold; font-size: 14px; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px !important; } /* ズーム防止 */
+        .flex-row { display: flex; gap: 10px; }
+        .flex-row div { flex: 1; }
+        .submit-btn { margin-top: 20px; width: 100%; background: #28a745; color: white; padding: 16px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(40,167,69,0.2); }
+        
+        /* 進捗表示 */
+        .progress-section { text-align: center; margin-bottom: 20px; padding: 15px; background: #e7f3ff; border-radius: 12px; }
+        .progress-bar-bg { background: #ddd; height: 12px; border-radius: 6px; overflow: hidden; margin: 8px 0; }
+        .progress-bar-fill { background: #007bff; height: 100%; width: 0%; transition: width 0.5s; }
+
+        /* 閲覧画面用 */
+        .company-title { margin-top: 25px; border-bottom: 2px solid #007bff; padding-bottom: 8px; color: #007bff; font-size: 18px; }
+        .line-card { padding: 15px 0; border-bottom: 1px solid #eee; cursor: pointer; }
+        .badge-complete { background: #ffd700; color: #8b4513; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; border: 1px solid #daa520; }
+        .history-area { display: none; background: #fcfcfc; padding: 12px; margin-top: 10px; font-size: 13px; border: 1px dashed #ccc; border-radius: 8px; }
+
+        /* バックアップエリア */
+        .backup-section { margin-top: 30px; padding: 15px; border: 1px dashed #6c757d; border-radius: 10px; background: #f8f9fa; text-align: center; }
+        .btn-small { background: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; margin: 5px; }
+        
+        ul { list-style: none; padding: 0; }
+        li { background: #fff; border: 1px solid #eee; padding: 12px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>鉄道完乗記録</h1>
+
+    <div class="progress-section">
+        <div style="font-weight: bold;">全線踏破へ 現在の記録 <span id="total-result">0%</span></div>
+        <div class="progress-bar-bg"><div id="total-progress-bar" class="progress-bar-fill"></div></div>
+        <small id="total-stats">0 / 0 km</small>
+    
+        <!-- ここに内訳を追加 -->
+        <div id="sub-stats"></div>
+    </div>
+
+    <div class="tab-container">
+        <button id="btn-input" class="tab-button active" onclick="showPage('input')">記録入力</button>
+        <button id="btn-view" class="tab-button" onclick="showPage('view')">全線閲覧</button>
+    </div>
+
+    <!-- 入力画面 -->
+    <div id="page-input">
+        <div class="input-group">
+            <p>1. 鉄道会社を選択:</p>
+            <select id="company-select" onchange="updateLineOptions()">
+                <option value="">--- 会社を選択してください ---</option>
+            </select>
+
+            <p>2. 路線を選択:</p>
+            <select id="line-select" onchange="updateTotal()">
+                <option value="0">--- 先に会社を選んでください ---</option>
+            </select>
+
+            <p>3. 乗車日:</p>
+            <input type="date" id="ride-date">
+
+            <p>4. 乗車区間（任意）:</p>
+            <input type="text" id="ride-section" placeholder="例：大阪梅田〜高槻市">
+
+            <div class="flex-row">
+                <div>
+                    <p>5. 全長(km):</p>
+                    <input type="number" id="total-dist" readonly style="background: #eee;" placeholder="自動入力">
+                </div>
+                <div>
+                    <p>6. 今回の乗車(km):</p>
+                    <input type="number" id="ride-dist" step="0.1" inputmode="decimal" placeholder="例：13.2">
+                </div>
+            </div>
+            <button class="submit-btn" onclick="addRecord()">記録を保存する</button>
+        </div>
+
+        <div style="background: white; padding: 10px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px;">
+            <h3 style="margin-top: 0; font-size: 15px;">累計乗車距離の推移</h3>
+    
+            <!-- 期間切り替えボタン -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <div>
+                    <button onclick="changeRange(3)" class="btn-small">3年</button>
+                    <button onclick="changeRange(10)" class="btn-small">10年</button>
+                    <button onclick="changeRange(0)" class="btn-small">全体</button>
+                </div>
+                <div>
+                    <button id="prev-period" onclick="movePeriod(-1)" class="btn-small">＜前へ</button>
+                    <button id="next-period" onclick="movePeriod(1)" class="btn-small">次へ＞</button>
+                </div>
+            </div>
+    
+            <canvas id="ride-chart"></canvas>
+        </div>
+
+        <h3>年別乗車距離</h3>
+        <canvas id="yearly-chart"></canvas>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <h3 style="margin: 0; font-size: 16px;">最近の記録</h3>
+            <!-- 検索窓 -->
+            <input type="text" id="search-input" placeholder="会社・路線を検索..." 
+                oninput="updateDisplay()" 
+                style="width: 50%; padding: 6px 10px; font-size: 13px; border-radius: 20px; border: 1px solid #ccc;">
+        </div>
+
+        <ul id="record-list"></ul>
+
+        <!-- もっと見るボタン -->
+        <button id="show-all-btn" onclick="toggleShowAll()" class="btn-small" 
+                style="width: 100%; padding: 10px; background: #f0f2f5; color: #007bff; border: 1px solid #007bff; display: none;">
+            すべての記録を表示する
+        </button>
+
+        <div class="backup-section">
+            <p style="margin: 0 0 10px; font-size: 13px; font-weight: bold;">📊 データ管理</p>
+            <button class="btn-small" onclick="exportData()">バックアップ保存</button>
+            <label class="btn-small">
+                データ復旧
+                <input type="file" style="display: none;" onchange="importData(event)">
+            </label>
+            <br>
+            <button onclick="clearAll()" style="background:none; border:none; color:#dc3545; cursor:pointer; font-size:11px; margin-top:10px;">[全データを削除]</button>
+        </div>
+    </div>
+
+    <!-- 閲覧画面 -->
+    <div id="page-view" style="display:none;">
+        <div id="full-line-list"></div>
+    </div>
+</div>
+
+<script>
+    const JAPAN_TOTAL_DIST = 27001;
+    let trainRecords = [];
+    let masterLines = [];
+    let myChart = null;
+    let editIndex = -1; // -1なら新規登録、0以上なら編集中のデータの添字
+    let isShowAll = false; // 全件表示フラグ
+
+    window.onload = function() {
+        const saved = localStorage.getItem('railway_data_v2');
+        if (saved) {
+            trainRecords = JSON.parse(saved);
+            updateDisplay();
+        }
+        fetch('lines.json')
+            .then(res => res.json())
+            .then(data => {
+                masterLines = data;
+                populateCompanySelect();
+            });
+        document.getElementById('ride-date').valueAsDate = new Date();
+    };
+
+    function showPage(pageId) {
+        const isInput = (pageId === 'input');
+        document.getElementById('page-input').style.display = isInput ? 'block' : 'none';
+        document.getElementById('page-view').style.display = isInput ? 'none' : 'block';
+        document.getElementById('btn-input').classList.toggle('active', isInput);
+        document.getElementById('btn-view').classList.toggle('active', !isInput);
+        if (!isInput) renderFullList();
+        if (isInput) updateChart();
+    }
+
+    function populateCompanySelect() {
+        const sel = document.getElementById('company-select');
+        masterLines.forEach((item, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = item.company;
+            sel.appendChild(opt);
+        });
+    }
+
+    function updateLineOptions() {
+        const idx = document.getElementById('company-select').value;
+        const sel = document.getElementById('line-select');
+        sel.innerHTML = '<option value="0">--- 路線を選択してください ---</option>';
+        if (idx === "") return;
+        masterLines[idx].lines.forEach(line => {
+            const opt = document.createElement('option');
+            opt.value = line.dist;
+            opt.textContent = `${line.name} (${line.dist}km)`;
+            sel.appendChild(opt);
+        });
+    }
+
+    function updateTotal() {
+        const val = document.getElementById('line-select').value;
+        document.getElementById('total-dist').value = (val === "0") ? "" : val;
+    }
+
+    function addRecord() {
+        const cSel = document.getElementById('company-select');
+        const lSel = document.getElementById('line-select');
+        const rDist = parseFloat(document.getElementById('ride-dist').value);
+        const rDate = document.getElementById('ride-date').value;
+        const rSect = document.getElementById('ride-section').value;
+
+        if (cSel.value === "" || isNaN(rDist) || !rDate) {
+            alert("入力に不足があります");
+            return;
+        }
+
+        // 保存用データの作成
+        // (路線名から距離表示 "(10.5km)" を除いて保存する処理)
+        const lineFullText = lSel.options[lSel.selectedIndex].text;
+        const lineNameOnly = lineFullText.split(' (')[0]; 
+
+        const newData = {
+            name: `${cSel.options[cSel.selectedIndex].text} ${lineNameOnly}`,
+            total: parseFloat(document.getElementById('total-dist').value),
+            ride: rDist,
+            date: rDate,
+            section: rSect || "（区間未入力）"
+        };
+
+        if (editIndex === -1) {
+            // --- 新規登録モード ---
+            trainRecords.push(newData);
+        } else {
+            // --- 編集上書きモード ---
+            // editIndex番目のデータを新しいデータで「置き換え」る
+            trainRecords[editIndex] = newData;
+        
+            // 編集が終わったらモードをリセット
+            editIndex = -1; 
+        
+            // ボタンのデザインとテキストを元に戻す
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.innerText = "記録を保存する";
+            submitBtn.style.background = "#28a745";
+            submitBtn.style.color = "#fff";
+        }
+
+        // データの保存と画面更新
+        save();
+        updateDisplay();
+    
+        // 入力フォームのクリア
+        document.getElementById('ride-dist').value = "";
+        document.getElementById('ride-section').value = "";
+    
+        // キーボードを閉じる(スマホ対策)
+        document.activeElement.blur(); 
+    
+        alert("保存が完了しました！");
+    }
+
+    function updateDisplay() {
+        // 1. マスターデータ読み込み待ちのガード
+        if (!masterLines || masterLines.length === 0) return;
+
+        const list = document.getElementById('record-list');
+        const searchVal = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : "";
+        if (!list) return;
+        list.innerHTML = "";
+
+        // --- 2. マスターデータから総延長（JR・私鉄別）を計算 ---
+        let totalNetworkDist = 0;
+        let jrNetworkDist = 0;
+        let pvtNetworkDist = 0;
+
+        masterLines.forEach(company => {
+            const companyDist = company.lines.reduce((sum, l) => sum + l.dist, 0);
+            totalNetworkDist += companyDist;
+            if (company.category === "JR") {
+                jrNetworkDist += companyDist;
+            } else {
+                pvtNetworkDist += companyDist;
+            }
+        });
+
+        // --- 3. 乗車済み距離（JR・私鉄別）を計算 ---
+        let totalRidden = 0;
+        let jrRidden = 0;
+        let pvtRidden = 0;
+
+        trainRecords.forEach(rec => {
+            const companyData = masterLines.find(c => rec.name.startsWith(c.company));
+            const category = companyData ? companyData.category : "私鉄";
+
+            totalRidden += rec.ride;
+            if (category === "JR") {
+                jrRidden += rec.ride;
+            } else {
+                pvtRidden += rec.ride;
+            }
+        });
+
+        // --- 4. UIの更新（進捗バー・統計値） ---
+        const totalP = (totalNetworkDist > 0) ? (totalRidden / totalNetworkDist) * 100 : 0;
+        document.getElementById('total-result').innerText = totalP.toFixed(2) + "%";
+        document.getElementById('total-stats').innerText = `${totalRidden.toFixed(1)} / ${totalNetworkDist.toFixed(1)} km`;
+        document.getElementById('total-progress-bar').style.width = totalP + "%";
+
+        const jrP = (jrNetworkDist > 0) ? (jrRidden / jrNetworkDist) * 100 : 0;
+        const pvtP = (pvtNetworkDist > 0) ? (pvtRidden / pvtNetworkDist) * 100 : 0;
+
+        document.getElementById('sub-stats').innerHTML = `
+            <div style="display: flex; justify-content: space-around; font-size: 11px; color: #666; margin-top: 4px;">
+                <span>JR: ${jrP.toFixed(1)}% (${jrRidden.toFixed(1)}km)</span>
+                <span>私鉄: ${pvtP.toFixed(1)}% (${pvtRidden.toFixed(1)}km)</span>
+            </div>
+        `;
+
+        // --- 5. 最近の記録（フィルタリング・件数制限） ---
+        // 検索フィルタリング（元データのインデックスを保持）
+        let filteredRecords = trainRecords.map((rec, idx) => ({ ...rec, originalIndex: idx }))
+            .filter(rec => {
+                return rec.name.toLowerCase().includes(searchVal) || 
+                    rec.section.toLowerCase().includes(searchVal);
+            });
+
+        // 新しい順（降順）に並べ替え
+        filteredRecords.reverse();
+
+        // 表示制限の判定（検索中または全表示フラグONなら全件出す）
+        const needsLimit = !isShowAll && searchVal === "";
+        const displayRecords = needsLimit ? filteredRecords.slice(0, 10) : filteredRecords;
+
+        displayRecords.forEach(rec => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div>
+                    <small>${rec.date}</small><br>
+                    <strong>${rec.name}</strong><br>
+                    <small>${rec.section} (${rec.ride}km)</small>
+                </div>
+                <div>
+                    <button onclick="edit(${rec.originalIndex})" class="btn-small" style="background:#ffc107; color:#000;">編集</button>
+                    <button onclick="del(${rec.originalIndex})" class="btn-small" style="background:#dc3545;">削除</button>
+                </div>`;
+            list.appendChild(li);
+        });
+
+        // --- updateDisplay関数の後半部分 ---
+
+        // 「もっと見る / 閉じる」ボタンの表示制御
+        const btn = document.getElementById('show-all-btn');
+        if (btn) {
+            if (searchVal !== "") {
+                // 検索中はボタンを隠す（全件出るのが基本のため）
+                btn.style.display = "none";
+            } else if (filteredRecords.length > 10) {
+                btn.style.display = "block";
+                if (isShowAll) {
+                    // すべて表示されている時
+                    btn.innerText = "表示件数を戻す (直近10件)";
+                    btn.style.background = "#f8f9fa"; // 控えめな色に
+                } else {
+                    // 制限されている時
+                    btn.innerText = `すべての記録を表示する (${filteredRecords.length}件)`;
+                    btn.style.background = "#fff"; 
+                }
+            } else {
+                // データ自体が10件以下の時
+                btn.style.display = "none";
+            }
+        }
+
+        updateChart();
+        updateYearlyChart();
+    }
+
+    function toggleShowAll() {
+        // 現在の状態を反対にする
+        isShowAll = !isShowAll;
+        updateDisplay();
+    }
+
+    function updateChart() {
+        const ctx = document.getElementById('ride-chart').getContext('2d');
+        const sorted = [...trainRecords].sort((a, b) => new Date(a.date) - new Date(b.date));
+        let sum = 0;
+        const data = sorted.map(r => { sum += r.ride; return { x: r.date, y: sum }; });
+
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: { datasets: [{ label: '累計(km)', data: data, borderColor: '#007bff', fill: true, backgroundColor: 'rgba(0,123,255,0.1)', tension: 0.2 }] },
+            options: { scales: { x: { display: true }, y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+        });
+    }
+
+    function renderFullList() {
+        const cont = document.getElementById('full-line-list');
+        if (!cont) return;
+        cont.innerHTML = "";
+        
+        masterLines.forEach((companyData, cIdx) => {
+            // --- 1. 会社ごとの合計数値を集計 ---
+            let companyTotalDist = 0;
+            let companyRiddenDist = 0;
+
+            companyData.lines.forEach(l => {
+                companyTotalDist += l.dist;
+                
+                // 保存名に合わせて照合（距離表示を含まない形式）
+                const targetName = `${companyData.company} ${l.name}`;
+                
+                const r = trainRecords
+                    .filter(tr => tr.name === targetName)
+                    .reduce((s, tr) => s + tr.ride, 0);
+                
+                // 完走上限を超えないよう集計
+                companyRiddenDist += Math.min(r, l.dist);
+            });
+
+            const companyPercent = (companyTotalDist > 0) ? (companyRiddenDist / companyTotalDist) * 100 : 0;
+
+            // --- 2. 会社のヘッダー（タイトル）を作成 ---
+            const h4 = document.createElement('h4');
+            h4.className = "company-title";
+            h4.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <span>${companyData.company}</span>
+                    <span style="font-size:13px; color:#555; font-weight:normal;">
+                        ${companyPercent.toFixed(1)}% <small>(${companyRiddenDist.toFixed(1)} / ${companyTotalDist.toFixed(1)} km)</small>
+                    </span>
+                </div>
+            `;
+            cont.appendChild(h4);
+
+            // --- 3. 各路線のカード表示 ---
+            companyData.lines.forEach((line, lIdx) => {
+                const targetName = `${companyData.company} ${line.name}`;
+                
+                // 履歴の抽出
+                const history = trainRecords.filter(r => r.name === targetName);
+                
+                // 【追加】履歴を乗車日順（古い順）に並び替える
+                history.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                const ridden = history.reduce((s, r) => s + r.ride, 0);
+                const p = Math.min((ridden / line.dist) * 100, 100);
+                const isComplete = p >= 100;
+                const id = `h-${cIdx}-${lIdx}`;
+                
+                const card = document.createElement('div');
+                card.className = "line-card";
+                if(isComplete) card.style.backgroundColor = "#fff9e6";
+
+                card.innerHTML = `
+                    <div onclick="toggle('${id}')">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span><strong>${line.name}</strong>${isComplete ? '<span class="badge-complete">完乗済</span>' : ''}</span>
+                            <span style="${isComplete ? 'color:#d4af37; font-weight:bold;' : ''}">${p.toFixed(1)}%</span>
+                        </div>
+                        <div class="progress-bar-bg" style="height:6px; margin: 4px 0;">
+                            <div class="progress-bar-fill" style="width:${p}%; background:${isComplete ? '#ffd700' : '#28a745'};"></div>
+                        </div>
+                        <div style="font-size:11px; color:#666; margin-bottom:2px;">
+                            乗車: ${ridden.toFixed(1)}km / 全長: ${line.dist}km
+                        </div>
+                    </div>
+                    <div id="${id}" class="history-area">
+                        <p style="margin:0 0 5px; font-weight:bold;">乗車履歴:</p>
+                        ${history.length > 0 ? history.map(h => `
+                            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding:2px 0;">
+                                <span>${h.date}</span>
+                                <span>${h.section}</span>
+                                <span>${h.ride}km</span>
+                            </div>`).join('') : '<p style="margin:0; color:#999;">履歴なし</p>'}
+                    </div>`;
+                cont.appendChild(card);
+            });
+        });
+    }
+
+    function toggle(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='block')?'none':'block'; }
+    function del(idx) { if(confirm("削除しますか？")) { trainRecords.splice(idx, 1); save(); updateDisplay(); } }
+    function save() { localStorage.setItem('railway_data_v2', JSON.stringify(trainRecords)); }
+    function exportData() {
+        const blob = new Blob([JSON.stringify(trainRecords, null, 2)], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `train_records.json`;
+        a.click();
+    }
+    function importData(e) {
+        const reader = new FileReader();
+        reader.onload = (ev) => { trainRecords = JSON.parse(ev.target.result); save(); updateDisplay(); alert("復旧完了"); };
+        reader.readAsText(e.target.files[0]);
+    }
+    function clearAll() { if(confirm("全消去しますか？")) { localStorage.removeItem('railway_data_v2'); location.reload(); } }
+    let currentRangeYears = 0; // 0なら全体表示
+    let currentEndDate = new Date(); // 表示期間の末尾
+
+    // 1. 範囲切り替え
+    function changeRange(years) {
+        currentRangeYears = years;
+        currentEndDate = new Date(); // 最新に戻す
+        updateDisplay();
+    }
+
+    // 2. 期間移動（前へ・次へ）
+    function movePeriod(direction) {
+        if (currentRangeYears === 0) return; // 全体表示時は移動不可
+        currentEndDate.setFullYear(currentEndDate.getFullYear() + (direction * currentRangeYears));
+        updateDisplay();
+    }
+
+    // 3. グラフ更新関数（修正版）
+    function updateChart() {
+        const ctx = document.getElementById('ride-chart').getContext('2d');
+    
+        // 全データを日付順にソート
+        const sorted = [...trainRecords].sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+        let sum = 0;
+        let allDataPoints = sorted.map(r => {
+            sum += r.ride;
+            return { x: r.date, y: sum };
+        });
+
+        // 表示期間の計算
+        let displayData = allDataPoints;
+        if (currentRangeYears > 0) {
+            const startDate = new Date(currentEndDate);
+            startDate.setFullYear(startDate.getFullYear() - currentRangeYears);
+        
+            displayData = allDataPoints.filter(p => {
+                const d = new Date(p.x);
+                return d >= startDate && d <= currentEndDate;
+            });
+
+            // 期間の最初が0から始まらないように、開始直前の累計値を「始点」として追加すると見やすくなります
+            const startVal = allDataPoints.filter(p => new Date(p.x) < startDate).pop();
+            if (startVal) {
+                displayData.unshift({ x: startDate.toISOString().split('T')[0], y: startVal.y });
+            }
+        }
+
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: '累計(km)',
+                    data: displayData,
+                    borderColor: '#007bff',
+                    fill: true,
+                    backgroundColor: 'rgba(0,123,255,0.1)',
+                    tension: 0.1,
+                    pointRadius: 2
+                }]
+            },
+            options: {
+                scales: {
+                    x: { 
+                        type: 'time', // ※注意：時系列軸を使うにはChart.jsのadapterが必要です
+                        time: { unit: 'year' },
+                        display: true 
+                    },
+                    y: { beginAtZero: false } // 累計なのでfalseの方が見やすい
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // 「前へ・次へ」ボタンの有効/無効制御
+        document.getElementById('prev-period').disabled = (currentRangeYears === 0);
+        document.getElementById('next-period').disabled = (currentRangeYears === 0);
+    }
+    function edit(idx) {
+        const rec = trainRecords[idx];
+        editIndex = idx; // 編集モードにする
+
+        // 1. 会社・路線をフォームに戻す
+        // ※会社名で検索してセレクトボックスを選択状態にする
+        const [compName] = rec.name.split(' ');
+        const cIdx = masterLines.findIndex(c => c.company === compName);
+    
+        if (cIdx !== -1) {
+            document.getElementById('company-select').value = cIdx;
+            updateLineOptions(); // 路線リストを更新
+        
+            // 路線名で一致するものを選択
+            const lSel = document.getElementById('line-select');
+            for (let i = 0; i < lSel.options.length; i++) {
+                if (rec.name.includes(lSel.options[i].text.split(' (')[0])) {
+                    lSel.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        // 2. その他の値をセット
+        document.getElementById('ride-date').value = rec.date;
+        document.getElementById('ride-section').value = rec.section;
+        document.getElementById('total-dist').value = rec.total;
+        document.getElementById('ride-dist').value = rec.ride;
+
+        // 3. ボタンの見た目を変える
+        const submitBtn = document.querySelector('.submit-btn');
+        submitBtn.innerText = "変更を上書き保存する";
+        submitBtn.style.background = "#ffc107";
+        submitBtn.style.color = "#000";
+
+        // 入力エリアまでスクロール
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function save() {
+        // 記録が0件かつ、意図的な全削除でない場合は保存をスキップする
+        if (trainRecords.length === 0 && localStorage.getItem('railway_data_v2')) {
+            return; 
+        }
+        localStorage.setItem('railway_data_v2', JSON.stringify(trainRecords));
+    }
+    function getYearlyData() {
+        const yearly = {};
+
+        trainRecords.forEach(rec => {
+            const year = new Date(rec.date).getFullYear();
+
+            if (!yearly[year]) {
+                yearly[year] = 0;
+            }
+
+            yearly[year] += rec.ride;
+        });
+
+        // 配列に変換してソート
+        return Object.keys(yearly)
+            .sort()
+            .map(year => ({
+                year: year,
+                distance: yearly[year]
+            }));
+    }
+    let yearlyChart = null;
+
+    function updateYearlyChart() {
+        const ctx = document.getElementById('yearly-chart').getContext('2d');
+        const data = getYearlyData();
+
+        const labels = data.map(d => d.year);
+        const values = data.map(d => d.distance);
+
+        if (yearlyChart) yearlyChart.destroy();
+
+        yearlyChart = new Chart(ctx, {
+            type: 'bar', // 年別は棒グラフが見やすい
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '年間乗車距離(km)',
+                    data: values
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log('Service Worker 登録成功'))
+            .catch(err => console.log('SW登録失敗:', err));
+    }
+</script>
+</body>
+</html>

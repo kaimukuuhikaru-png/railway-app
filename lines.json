@@ -1,0 +1,1597 @@
+[
+    {
+        "company": "新幹線",
+        "category": "JR",
+        "lines": [
+            { "name": "東海道新幹線", "dist": 552.6 },
+            { "name": "山陽新幹線", "dist": 644.0 },
+            { "name": "九州新幹線", "dist": 288.9 },
+            { "name": "西九州新幹線", "dist": 69.6 },
+            { "name": "東北新幹線", "dist": 713.7 },
+            { "name": "北海道新幹線", "dist": 148.8 },
+            { "name": "上越新幹線", "dist": 303.6 },
+            { "name": "北陸新幹線", "dist": 470.6 },
+            { "name": "博多南線", "dist": 8.5 },
+            { "name": "上越新幹線（ガーラ湯沢）", "dist": 1.8 }
+
+        ]
+    },
+    {
+        "company": "JR北海道",
+        "category": "JR",
+        "lines": [
+            { "name": "函館本線", "dist": 423.1 },
+            { "name": "函館本線（七飯-大沼）", "dist": 13.2 },
+            { "name": "函館本線（大沼-渡島砂原-森）", "dist": 35.3 },
+            { "name": "室蘭本線", "dist": 211.0 },
+            { "name": "室蘭本線（東室蘭-室蘭）", "dist": 7.0 },
+            { "name": "千歳線", "dist": 56.6 },
+            { "name": "千歳線（南千歳-新千歳空港）", "dist": 2.6 },
+            { "name": "日高本線", "dist": 30.5 },
+            { "name": "札沼線", "dist": 28.9 },
+            { "name": "富良野線", "dist": 54.8 },
+            { "name": "石勝線", "dist": 132.4 },
+            { "name": "東海道新幹線", "dist": 552.6 },
+            { "name": "根室本線（滝川-富良野", "dist": 54.6 },
+            { "name": "根室本線（新得-根室）", "dist": 307.5 },
+            { "name": "釧網本線", "dist": 166.2 },
+            { "name": "石北本線", "dist": 234.0 },
+            { "name": "宗谷本線", "dist": 259.4 }
+        ]
+    },
+    {
+        "company": "JR東日本",
+        "category": "JR",
+        "lines": [
+            { "name": "東海道本線（東京-熱海）", "dist": 104.6 },
+            { "name": "東海道本線（横須賀線 品川-新川崎-鶴見）", "dist": 17.8 },
+            { "name": "相鉄・JR直通線", "dist": 8.8 },
+            { "name": "横須賀線", "dist": 23.9 },
+            { "name": "総武本線", "dist": 120.5 },
+            { "name": "総武本線（錦糸町-新御茶ノ水）", "dist": 4.3 },
+            { "name": "成田線", "dist": 75.4 },
+            { "name": "成田線（成田-成田空港）", "dist": 10.8 },
+            { "name": "成田線（成田-我孫子）", "dist": 32.9 },
+            { "name": "鹿島線", "dist": 17.4 },
+            { "name": "東金線", "dist": 13.8 },
+            { "name": "久留里線", "dist": 32.2 },
+            { "name": "内房線", "dist": 119.4 },
+            { "name": "外房線", "dist": 93.3 },
+            { "name": "伊東線", "dist": 16.9 },
+            { "name": "山手線", "dist": 20.6 },
+            { "name": "赤羽線", "dist": 5.5 },
+            { "name": "埼京線", "dist": 18.0 },
+            { "name": "川越線", "dist": 30.6 },
+            { "name": "南武線", "dist": 35.5 },
+            { "name": "南武線（尻手-浜川崎）", "dist": 4.1 },
+            { "name": "根岸線", "dist": 22.1 },
+            { "name": "五日市線", "dist": 11.1 },
+            { "name": "青梅線", "dist": 37.2 },
+            { "name": "横浜線", "dist": 42.6 },
+            { "name": "鶴見線", "dist": 7.0 },
+            { "name": "鶴見線（海芝浦支線）", "dist": 1.7 },
+            { "name": "鶴見線（大川支線）", "dist": 1.0 },
+            { "name": "武蔵野線", "dist": 71.8 },
+            { "name": "京葉線", "dist": 43.0 },
+            { "name": "京葉線（西船橋-東船橋）", "dist": 5.4 },
+            { "name": "京葉線（西船橋-市川塩浜）", "dist": 5.9 },
+            { "name": "信越本線（直江津-新潟）", "dist": 136.3 },
+            { "name": "弥彦線", "dist": 17.4 },
+            { "name": "越後線", "dist": 83.8 },
+            { "name": "飯山線", "dist": 96.7 },
+            { "name": "中央本線（神田-代々木）", "dist": 8.3 },
+            { "name": "中央本線（新宿-塩尻）", "dist": 211.8},
+            { "name": "中央本線（岡谷-辰野-塩尻）", "dist": 27.7 },
+            { "name": "篠ノ井線", "dist": 66.7 },
+            { "name": "小海線", "dist": 78.9 },
+            { "name": "八高線", "dist": 92.0 },
+            { "name": "相模線", "dist": 33.3 },
+            { "name": "大糸線（松本-南小谷）", "dist": 70.1 },
+            { "name": "高崎線", "dist": 74.7 },
+            { "name": "上越線", "dist": 162.6 },
+            { "name": "両毛線", "dist": 84.4 },
+            { "name": "吾妻線", "dist": 55.3 },
+            { "name": "信越本線（高崎-横川)", "dist": 29.7 },
+            { "name": "信越本線（篠ノ井-長野）", "dist": 9.3 },
+            { "name": "東北本線", "dist": 535.3 },
+            { "name": "東北本線（尾久経由）", "dist": 7.6 },
+            { "name": "東北本線（利府支線）", "dist": 4.2 },
+            { "name": "東北本線（仙石東北ライン）", "dist": 0.3 },
+            { "name": "日光線", "dist": 40.5 },
+            { "name": "烏山線", "dist": 20.4 },
+            { "name": "八戸線", "dist": 64.9 },
+            { "name": "大湊線", "dist": 58.4 },
+            { "name": "常磐線", "dist": 343.1 },
+            { "name": "水戸線", "dist": 50.2 },
+            { "name": "水郡線", "dist": 137.5 },
+            { "name": "水郡線（上菅谷-常陸太田）", "dist": 9.5 },
+            { "name": "磐越西線", "dist": 175.6 },
+            { "name": "磐越東線", "dist": 85.6 },
+            { "name": "只見線", "dist": 135.2 },
+            { "name": "仙石線", "dist": 49.0 },
+            { "name": "仙山線", "dist": 58.0 },
+            { "name": "石巻線", "dist": 44.7 },
+            { "name": "気仙沼線", "dist": 17.5 },
+            { "name": "大船渡線", "dist": 62.0 },
+            { "name": "北上線", "dist": 61.1 },
+            { "name": "釜石線", "dist": 90.2 },
+            { "name": "山田線", "dist": 157.5 },
+            { "name": "陸羽東線", "dist": 94.1 },
+            { "name": "陸羽西線", "dist": 43.0 },
+            { "name": "花輪線", "dist": 106.9 },
+            { "name": "白新線", "dist": 27.3 },
+            { "name": "羽越本線", "dist": 271.7 },
+            { "name": "左沢線", "dist": 24.3 },
+            { "name": "米坂線", "dist": 90.7 },
+            { "name": "五能線", "dist": 147.2 },
+            { "name": "男鹿線", "dist": 26.6 },
+            { "name": "奥羽本線", "dist": 484.5 },
+            { "name": "田沢湖線", "dist": 75.6 },
+            { "name": "津軽線", "dist": 27.0 }
+        ]
+    },
+    {
+        "company": "JR東海",
+        "category": "JR",
+        "lines": [
+            { "name": "東海道本線（熱海-米原）", "dist": 341.3 },
+            { "name": "東海道本線（大垣-関ヶ原）", "dist": 13.8 },
+            { "name": "東海道本線（美濃赤坂支線）", "dist": 5.0 },
+            { "name": "御殿場線", "dist": 60.2 },
+            { "name": "武豊線", "dist": 19.3 },
+            { "name": "名松線", "dist": 43.5 },
+            { "name": "身延線", "dist": 88.4 },
+            { "name": "飯田線", "dist": 195.7 },
+            { "name": "関西本線（名古屋-亀山）", "dist": 59.9 },
+            { "name": "紀勢本線（亀山-新宮）", "dist": 180.2 },
+            { "name": "参宮線", "dist": 29.1 },
+            { "name": "高山本線（岐阜-猪谷）", "dist": 189.2 },
+            { "name": "中央本線（塩尻-名古屋）", "dist": 174.8 }
+        ]
+    },
+    {
+        "company": "JR西日本",
+        "category": "JR",
+        "lines": [
+            { "name": "大阪環状線", "dist": 21.7 },
+            { "name": "桜島線", "dist": 4.1 },
+            { "name": "阪和線", "dist": 61.3 },
+            { "name": "東羽衣支線", "dist": 1.7 },
+            { "name": "おおさか東線", "dist": 20.3 },
+            { "name": "片町線", "dist": 44.8 },
+            { "name": "JR東西線", "dist": 12.5 },
+            { "name": "東海道本線（米原-神戸）", "dist": 143.6 },
+            { "name": "山陽本線", "dist": 534.4 },
+            { "name": "山陽本線（和田岬線）", "dist": 2.7 },
+            { "name": "関西本線（亀山-JR難波）", "dist": 115.0 },
+            { "name": "紀勢本線（新宮-和歌山市）", "dist": 204.0 },
+            { "name": "関西空港", "dist": 11.1 },
+            { "name": "奈良線", "dist": 34.7 },
+            { "name": "草津線", "dist": 36.7 },
+            { "name": "和歌山線", "dist": 87.5 },
+            { "name": "桜井線", "dist": 29.4 },
+            { "name": "姫新線", "dist": 158.1 },
+            { "name": "加古川線", "dist": 48.5 },
+            { "name": "津山線", "dist": 58.7 },
+            { "name": "吉備線", "dist": 20.4 },
+            { "name": "赤穂線", "dist": 57.4 },
+            { "name": "因美線", "dist": 70.8 },
+            { "name": "伯備線", "dist": 138.4 },
+            { "name": "福塩線", "dist": 78.0 },
+            { "name": "呉線", "dist": 87.0 },
+            { "name": "芸備線", "dist": 159.1 },
+            { "name": "可部線", "dist": 18.6 },
+            { "name": "岩徳線", "dist": 43.7 },
+            { "name": "山口線", "dist": 93.9 },
+            { "name": "美祢線", "dist": 46.0 },
+            { "name": "宇部線", "dist": 33.2 },
+            { "name": "小野田線", "dist": 11.6 },
+            { "name": "小野田線（長門本山支線）", "dist": 2.3 },
+            { "name": "宇野線", "dist": 32.8 },
+            { "name": "瀬戸大橋線（茶屋町-児島）", "dist": 12.9 },
+            { "name": "山陰本線", "dist": 673.8},
+            { "name": "山陰本線（支線）", "dist": 2.2 },
+            { "name": "播但線", "dist": 65.7 },
+            { "name": "木次線", "dist": 81.9 },
+            { "name": "福知山線", "dist": 106.5 },
+            { "name": "舞鶴線", "dist": 26.4 },
+            { "name": "小浜線", "dist": 84.3 },
+            { "name": "境線", "dist": 17.9 },
+            { "name": "湖西線", "dist": 74.1 },
+            { "name": "北陸本線", "dist": 45.9 },
+            { "name": "越美北線", "dist": 52.5 },
+            { "name": "城端線", "dist": 29.9 },
+            { "name": "氷見線", "dist": 16.5 },
+            { "name": "七尾線", "dist": 59.5 },
+            { "name": "高山本線（猪谷-富山）", "dist": 36.6 },
+            { "name": "大糸線（南小谷-糸魚川）", "dist": 35.3 }
+        ]
+    },
+    {
+        "company": "JR四国",
+        "category": "JR",
+        "lines": [
+            { "name": "瀬戸大橋線（児島-宇多津）", "dist": 18.1 },
+            { "name": "予讃線", "dist": 297.6 },
+            { "name": "予讃線（向井原-内子）", "dist": 23.5 },
+            { "name": "予讃線（伊予大須-新谷", "dist": 5.9 },
+            { "name": "内子線", "dist": 5.3 },
+            { "name": "土讃線", "dist": 198.7 },
+            { "name": "高徳線", "dist": 74.5 },
+            { "name": "鳴門線", "dist": 8.5 },
+            { "name": "牟岐線", "dist": 79.3 },
+            { "name": "徳島線", "dist": 67.5 },
+            { "name": "予土線", "dist": 76.3 }
+        ]
+    },
+    {
+        "company": "JR九州",
+        "category": "JR",
+        "lines": [
+            { "name": "鹿児島本線（門司港-八代）", "dist": 232.3 },
+            { "name": "鹿児島本線（川内-鹿児島）", "dist": 49.3 },
+            { "name": "長崎本線", "dist": 125.3 },
+            { "name": "長崎本線（諫早-長与-浦上）", "dist": 23.5 },
+            { "name": "佐世保線", "dist": 48.8 },
+            { "name": "筑肥線（姪浜-唐津）", "dist": 42.6 },
+            { "name": "筑肥線（山本-伊万里）", "dist": 25.7 },
+            { "name": "大村線", "dist": 47.6 },
+            { "name": "香椎線", "dist": 25.4 },
+            { "name": "唐津線", "dist": 42.5 },
+            { "name": "豊肥本線", "dist": 148.0 },
+            { "name": "久大本線", "dist": 141.5 },
+            { "name": "三角線", "dist": 25.6 },
+            { "name": "日田彦山線", "dist": 68.7 },
+            { "name": "筑豊本線", "dist": 66.1 },
+            { "name": "笹栗線", "dist": 25.1 },
+            { "name": "後藤寺線", "dist": 13.3 },
+            { "name": "日豊本線", "dist": 462.6 },
+            { "name": "宮崎空港線", "dist": 1.4 },
+            { "name": "日南線", "dist": 88.9 },
+            { "name": "肥薩線", "dist": 124.2 },
+            { "name": "指宿枕崎線", "dist": 87.8 },
+            { "name": "吉都線", "dist": 61.6 }            
+        ]
+    },
+
+    {
+        "company": "東京メトロ",
+        "category": "私鉄",
+        "lines": [
+            { "name": "銀座線", "dist": 14.3 },
+            { "name": "丸の内線", "dist": 24.2 },
+            { "name": "丸の内線（方南町線）", "dist": 3.2 },
+            { "name": "日比谷線", "dist": 20.3 },
+            { "name": "東西線", "dist": 30.8 },
+            { "name": "千代田線", "dist": 21.9 },
+            { "name": "千代田線（北綾瀬線）", "dist": 2.1 },
+            { "name": "有楽町線", "dist": 28.3},
+            { "name": "副都心線", "dist": 8.9 },
+            { "name": "半蔵門線", "dist": 16.8 },
+            { "name": "南北線", "dist": 21.3 }
+
+        ]
+    },
+    {
+        "company": "京浜急行電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 56.7 },
+            { "name": "久里浜線", "dist": 13.4 },
+            { "name": "空港線", "dist": 6.5 },
+            { "name": "大師線", "dist": 4.5 },
+            { "name": "逗子線", "dist": 5.9 }
+        ]
+    },
+    {
+        "company": "京成電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 69.3},
+            { "name": "東成田線", "dist": 7.1 },
+            { "name": "金町線", "dist": 2.5},
+            { "name": "押上線", "dist": 5.7},
+            { "name": "千葉線", "dist": 12.9 },
+            { "name": "千原線", "dist": 10.9 },
+            { "name": "成田空港線（成田スカイアクセス線）", "dist": 51.4},
+            { "name": "松戸線", "dist": 26.5 }
+        ]
+    },
+    {
+        "company": "西武鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "池袋線", "dist": 57.8},
+            { "name": "西武秩父線", "dist": 19.0 },
+            { "name": "豊島線", "dist": 1.0},
+            { "name": "西武有楽町線", "dist": 2.6},
+            { "name": "狭山線", "dist": 4.2 },
+            { "name": "新宿線", "dist": 47.5 },
+            { "name": "拝島線", "dist": 14.3},
+            { "name": "多摩湖線", "dist": 9.2 },
+            { "name": "国分寺線", "dist": 7.8 },
+            { "name": "西武園線", "dist": 2.4 },
+            { "name": "多摩川線", "dist": 8.0 },
+            { "name": "山口線", "dist": 2.8 }
+        ]
+    },
+    {
+        "company": "東武鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "伊勢崎線", "dist": 114.5},
+            { "name": "伊勢崎線(押上-曳舟）", "dist": 1.3 },
+            { "name": "日光線", "dist": 94.5},
+            { "name": "宇都宮線", "dist": 24.3},
+            { "name": "亀戸線", "dist": 3.4 },
+            { "name": "大師線", "dist": 1.0 },
+            { "name": "鬼怒川線", "dist": 16.2},
+            { "name": "佐野線", "dist": 22.1 },
+            { "name": "小泉線（館林-東小泉）", "dist": 13.2 },
+            { "name": "小泉線（東小泉-太田）", "dist": 9.1 },
+            { "name": "桐生線", "dist": 20.3 },
+            { "name": "野田線", "dist": 62.7},
+            { "name": "東上本線", "dist": 75.0 },
+            { "name": "越生線", "dist": 10.9 }
+        ]
+    },
+    {
+        "company": "小田急電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "小田原線", "dist": 82.5},
+            { "name": "多摩線", "dist": 10.6 },
+            { "name": "江ノ島線", "dist": 27.6}
+        ]
+    },
+    {
+        "company": "京王電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "京王線", "dist": 37.9},
+            { "name": "京王新線", "dist": 3.6 },
+            { "name": "競馬場線", "dist": 0.9},
+            { "name": "動物園線", "dist": 2.0},
+            { "name": "相模原線", "dist": 22.6 },
+            { "name": "高尾線", "dist": 8.6 },
+            { "name": "井の頭線", "dist": 12.7}
+        ]
+    },
+    {
+        "company": "東京急行電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東横線", "dist": 24.2},
+            { "name": "田園都市線", "dist": 31.5 },
+            { "name": "こどもの国線", "dist": 3.4},
+            { "name": "目黒線", "dist": 6.5},
+            { "name": "東急多摩川線", "dist": 5.6 },
+            { "name": "大井町線", "dist": 10.4 },
+            { "name": "池上線", "dist": 10.9},
+            { "name": "世田谷線", "dist": 5.0 }
+        ]
+    },
+    {
+        "company": "相模鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 24.6},
+            { "name": "いずみ野線", "dist": 11.3 }
+        ]
+    },
+    {
+        "company": "名古屋鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "名古屋本線", "dist": 99.8},
+            { "name": "西尾線", "dist": 24.7 },
+            { "name": "蒲郡線", "dist": 17.6},
+            { "name": "豊川線", "dist": 7.2},
+            { "name": "三河線", "dist": 39.8 },
+            { "name": "豊田線", "dist": 15.2 },
+            { "name": "知多新線", "dist": 13.9},
+            { "name": "常滑線", "dist": 29.3 },
+            { "name": "空港線", "dist": 4.2 },
+            { "name": "河和線", "dist": 28.8 },
+            { "name": "築港線", "dist": 1.5 },
+            { "name": "瀬戸線", "dist": 20.6 },
+            { "name": "津島線", "dist": 11.8 },
+            { "name": "尾西線", "dist": 30.9 },
+            { "name": "犬山線", "dist": 27.4 },
+            { "name": "各務原線", "dist": 17.6 },
+            { "name": "広見線", "dist": 22.3 },
+            { "name": "小牧線", "dist": 20.6 },
+            { "name": "竹鼻線", "dist": 10.3 },
+            { "name": "羽島線", "dist": 1.3 }
+        ]
+    },
+    {
+        "company": "近畿日本鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "大阪線", "dist": 108.9},
+            { "name": "山田線", "dist": 28.3 },
+            { "name": "鳥羽線", "dist": 13.2},
+            { "name": "志摩線", "dist": 24.5},
+            { "name": "信貴線", "dist": 2.8 },
+            { "name": "名古屋線", "dist": 78.8 },
+            { "name": "湯の山線", "dist": 15.4},
+            { "name": "鈴鹿線", "dist": 8.2 },
+            { "name": "京都線", "dist": 34.6 },
+            { "name": "橿原線", "dist": 23.8 },
+            { "name": "天理線", "dist": 4.5 },
+            { "name": "田原本線", "dist": 10.1 },
+            { "name": "生駒線", "dist": 12.4 },
+            { "name": "難波線", "dist": 2.0 },
+            { "name": "奈良線", "dist": 26.7 },
+            { "name": "けいはんな線", "dist": 18.8 },
+            { "name": "南大阪線", "dist": 39.7 },
+            { "name": "吉野線", "dist": 25.2 },
+            { "name": "道明寺線", "dist": 2.2 },
+            { "name": "長野線", "dist": 12.5 },
+            { "name": "御所線", "dist": 5.2 }
+        ]
+    },
+    {
+        "company": "京阪電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "京阪本線", "dist": 49.3},
+            { "name": "鴨東線", "dist": 2.3 },
+            { "name": "中之島線", "dist": 3.0},
+            { "name": "宇治線", "dist": 7.6},
+            { "name": "交野線", "dist": 6.9 },
+            { "name": "石山坂本線", "dist": 14.1 },
+            { "name": "京津線", "dist": 7.5}
+        ]
+    },
+    {
+        "company": "南海電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "南海本線", "dist": 64.2},
+            { "name": "和歌山港線", "dist": 2.8 },
+            { "name": "加太線", "dist": 9.6},
+            { "name": "多奈川線", "dist": 2.6},
+            { "name": "空港線", "dist": 8.8 },
+            { "name": "高野線", "dist": 64.5 },
+            { "name": "泉北線", "dist": 14.3 },
+            { "name": "高師浜線", "dist": 1.5}
+        ]
+    },
+    {
+        "company": "阪急電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "京都線", "dist": 45.3},
+            { "name": "嵐山線", "dist": 4.1 },
+            { "name": "千里線", "dist": 13.6},
+            { "name": "宝塚線", "dist": 24.5},
+            { "name": "箕面線", "dist": 4.0 },
+            { "name": "今津線", "dist": 9.3 },
+            { "name": "神戸線", "dist": 32.3},
+            { "name": "伊丹線", "dist": 3.1 },
+            { "name": "甲陽線", "dist": 2.2 },
+            { "name": "神戸高速線（東西線）", "dist": 2.8 }
+        ]
+    },
+    {
+        "company": "阪神電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 32.1},
+            { "name": "阪神なんば線", "dist": 10.1 },
+            { "name": "武庫川線", "dist": 1.7},
+            { "name": "神戸高速線（東西線）", "dist": 5.0}
+        ]
+    },
+    {
+        "company": "西日本鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "天神大牟田線", "dist": 74.8},
+            { "name": "太宰府線", "dist": 2.4 },
+            { "name": "甘木線", "dist": 17.9},
+            { "name": "貝塚線", "dist": 11.0}
+        ]
+    },
+
+    {
+        "company": "札幌市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東西線", "dist": 20.1 },
+            { "name": "南北線", "dist": 14.3 },
+            { "name": "東豊線", "dist": 13.6 },
+            { "name": "市内電車", "dist": 8.9 }
+        ]
+    },
+
+    {
+        "company": "函館市企業局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "5系統", "dist": 20.1 },
+            { "name": "2系統", "dist": 14.3 }
+        ]
+    },
+
+    {
+        "company": "道南いさりび鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "道南いさびり鉄道線", "dist": 37.8 }
+        ]
+    },
+
+    {
+        "company": "青い森鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "青い森鉄道線", "dist": 121.9 }
+        ]
+    },
+
+    {
+        "company": "弘南鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "弘南線", "dist": 16.8 },
+            { "name": "大鰐線", "dist": 13.9 }
+        ]
+    },
+    {
+        "company": "津軽鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "津軽鉄道線", "dist": 20.7 }
+        ]
+    },
+    {
+        "company": "IGRいわて銀河鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "いわて銀河鉄道線", "dist": 121.9 }
+        ]
+    },
+    {
+        "company": "三陸鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "南リアス線", "dist": 36.6 },
+            { "name": "リアス線", "dist": 55.4 },
+            { "name": "リアス線", "dist": 71.0 }
+        ]
+    },
+    {
+        "company": "仙台空港鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "仙台空港線", "dist": 7.1 }
+        ]
+    },
+    {
+        "company": "仙台市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "南北線", "dist": 14.8 },
+            { "name": "東西線", "dist": 13.9 }
+        ]
+    },
+    {
+        "company": "由利高原鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "鳥海山ろく線", "dist": 23.0 }
+        ]
+    },
+    {
+        "company": "秋田内陸縦貫鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "秋田内陸線", "dist": 94.2 }
+        ]
+    },
+    {
+        "company": "山形鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "フラワー長井線", "dist": 30.5 }
+        ]
+    },    
+    {
+        "company": "会津鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "会津線", "dist": 57.4 }
+        ]
+    },
+    {
+        "company": "阿武隈急行",
+        "category": "私鉄",
+        "lines": [
+            { "name": "阿武隈急行線", "dist": 54.9 }
+        ]
+    },
+    {
+        "company": "福島交通",
+        "category": "私鉄",
+        "lines": [
+            { "name": "飯坂線", "dist": 9.2 }
+        ]
+    },
+    {
+        "company": "鹿島臨海鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "大洗鹿島線", "dist": 53.0 }
+        ]
+    },
+    {
+        "company": "ひたちなか海浜鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "湊線", "dist": 14.3 }
+        ]
+    },
+
+    {
+        "company": "関東鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "常総線", "dist": 51.1 },
+            { "name": "竜ケ崎線", "dist": 4.5 }
+        ]
+    },
+
+    {
+        "company": "真岡鐡道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "真岡線", "dist": 41.9 }
+        ]
+    },
+    
+    {
+        "company": "野岩鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "会津鬼怒川線", "dist": 30.7 }
+        ]
+    },
+
+    {
+        "company": "わたらせ峡谷鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "わたらせ渓谷線", "dist": 44.1 }
+        ]
+    },
+
+    {
+        "company": "上信鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "上信線", "dist": 33.7 }
+        ]
+    },
+
+    {
+        "company": "上毛電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "上毛線", "dist": 25.4 }
+        ]
+    },
+
+    {
+        "company": "埼玉高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "埼玉高速鉄道線", "dist": 14.6 }
+        ]
+    },
+    {
+        "company": "埼玉新都市交通ニューシャトル",
+        "category": "私鉄",
+        "lines": [
+            { "name": "伊奈線", "dist": 30.7 }
+        ]
+    },
+    {
+        "company": "秩父鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "秩父本線", "dist": 71.7 }
+        ]
+    },
+    {
+        "company": "いすみ鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "いすみ線", "dist": 26.8 }
+        ]
+    },
+    {
+        "company": "銚子電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "銚子電気鉄道線", "dist": 6.4 }
+        ]
+    },
+
+    {
+        "company": "小湊鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "小湊鉄道線", "dist": 39.1 }
+        ]
+    },
+
+    {
+        "company": "舞浜リゾートライン",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ディズニーリゾートライン", "dist": 5.0 }
+        ]
+    },
+    {
+        "company": "東葉高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東葉高速線", "dist": 16.2 }
+        ]
+    },
+
+    {
+        "company": "芝山鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "芝山鉄道線", "dist": 2.2 }
+        ]
+    },
+
+    {
+        "company": "山万",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ユーカリが丘線", "dist": 4.1 }
+        ]
+    },
+    {
+        "company": "北総鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "北総線", "dist": 32.3 }
+        ]
+    },
+    
+
+    {
+        "company": "千葉都市モノレール",
+        "category": "私鉄",
+        "lines": [
+            { "name": "1号線", "dist": 3.2 },
+            { "name": "2号線", "dist": 12.0 }
+        ]
+    },
+
+    {
+        "company": "流鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "流山線", "dist": 5.7 }
+        ]
+    },
+
+   
+
+    {
+        "company": "東京都交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "浅草線", "dist": 14.3 },
+            { "name": "三田線", "dist": 24.2 },
+            { "name": "新宿線", "dist": 3.2 },
+            { "name": "大江戸線", "dist": 20.3 },
+            { "name": "荒川線", "dist": 30.8 },
+            { "name": "日暮里・舎人ライナー", "dist": 21.9 }
+        ]
+    },
+
+    {
+        "company": "ゆりかもめ",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東京臨海新交通臨海線", "dist": 14.7 }
+        ]
+    },
+
+    {
+        "company": "東京臨海高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "りんかい線", "dist": 12.2 }
+        ]
+    },
+
+    {
+        "company": "東京モノレール",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東京モノレール羽田空港線", "dist": 17.8 }
+        ]
+    },
+
+    {
+        "company": "首都圏新都市鉄道つくばエクスプレス",
+        "category": "私鉄",
+        "lines": [
+            { "name": "常磐新線", "dist": 58.3 }
+        ]
+    },
+
+    {
+        "company": "多摩都市モノレール",
+        "category": "私鉄",
+        "lines": [
+            { "name": "多摩都市モノレール線", "dist": 16.0 }
+        ]
+    },
+
+    {
+        "company": "江ノ島電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "江ノ島電鉄線", "dist": 10.0 }
+        ]
+    },
+
+    {
+        "company": "湘南モノレール",
+        "category": "私鉄",
+        "lines": [
+            { "name": "江の島線", "dist": 6.6 }
+        ]
+    },
+    
+    {
+        "company": "横浜高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "みなとみらい線", "dist": 4.1 }
+        ]
+    },
+
+    {
+        "company": "横浜シーサイドライン",
+        "category": "私鉄",
+        "lines": [
+            { "name": "金沢シーサイドライン", "dist": 10.6 }
+        ]
+    },
+
+    {
+        "company": "横浜市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ブルーライン", "dist": 40.4 },
+            { "name": "グリーンライン", "dist": 13.0 }
+        ]
+    },
+    {
+        "company": "箱根登山鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "箱根登山線", "dist": 15.0 }
+        ]
+    },
+
+    {
+        "company": "伊豆箱根鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "大雄山線", "dist": 9.6 },
+            { "name": "駿豆線", "dist": 19.8 }
+        ]
+    },
+
+    {
+        "company": "北越急行",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ほくほく線", "dist": 59.5 }
+        ]
+    },
+
+    {
+        "company": "えちごトキめき鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "妙高はねうまライン", "dist": 37.7 },
+            { "name": "日本海ひすいライン", "dist": 59.3 }
+        ]
+    },
+
+    {
+        "company": "あいの風とやま鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "あいの風とやま鉄道線", "dist": 100.1 }
+        ]
+    },
+
+    {
+        "company": "富山地方鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 53.3 },
+            { "name": "立山線", "dist": 24.2 },
+            { "name": "不二越・上滝線", "dist": 15.7 },
+            { "name": "市内線", "dist": 7.3 },
+            { "name": "富山港線", "dist": 7.6 },
+            { "name": "市内環状線", "dist": 1.1 }
+        ]
+    },
+
+    {
+        "company": "黒部峡谷鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 20.1 }
+        ]
+    },
+
+    {
+        "company": "万葉線",
+        "category": "私鉄",
+        "lines": [
+            { "name": "高岡軌道線", "dist": 8.0 },
+            { "name": "新湊港線", "dist": 4.9 }
+        ]
+    },
+    {
+        "company": "のと鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "七尾線", "dist": 33.1 }
+        ]
+    },    
+    {
+        "company": "IRいしかわ鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "IRいしかわ鉄道線", "dist": 64.2 }
+        ]
+    },
+
+    {
+        "company": "ハピラインふくい",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ハピラインふくい線", "dist": 84.3 }
+        ]
+    },
+    {
+        "company": "北陸鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "浅野川線", "dist": 6.8 },
+            { "name": "石川線", "dist": 13.8 }
+        ]
+    },
+    {
+        "company": "えちぜん鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "三国芦原線", "dist": 25.2 },
+            { "name": "勝山永平寺線", "dist": 27.8 }
+        ]
+    },
+
+    {
+        "company": "福井鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "福武線", "dist": 20.9 },
+            { "name": "福武線（福井城址大名町-福井駅）", "dist": 0.5 }
+        ]
+    },
+    {
+        "company": "富士急行",
+        "category": "私鉄",
+        "lines": [
+            { "name": "富士急行線", "dist": 25.6 }
+        ]
+    },
+    {
+        "company": "しなの鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "しなの鉄道線", "dist": 65.1 },
+            { "name": "北しなの線", "dist": 37.3 }
+        ]
+    },
+    {
+        "company": "長野電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "長野線", "dist": 33.2 }
+        ]
+    },
+    {
+        "company": "上田電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "別所線", "dist": 11.6 }
+        ]
+    },
+    {
+        "company": "アルピコ交通",
+        "category": "私鉄",
+        "lines": [
+            { "name": "上高地線", "dist": 14.4 }
+        ]
+    },
+    {
+        "company": "樽見鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "樽見線", "dist": 34.5 }
+        ]
+    },
+    {
+        "company": "長良川鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "長良川線", "dist": 72.1 }
+        ]
+    },
+    {
+        "company": "明知鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "明智線", "dist": 25.1 }
+        ]
+    },
+    {
+        "company": "養老鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "養老線", "dist": 57.5 }
+        ]
+    },
+    {
+        "company": "伊豆急行",
+        "category": "私鉄",
+        "lines": [
+            { "name": "伊豆急行線", "dist": 45.7 }
+        ]
+    },
+    {
+        "company": "天竜浜名湖鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "天浜線", "dist": 67.7 }
+        ]
+    },
+    {
+        "company": "岳南電車",
+        "category": "私鉄",
+        "lines": [
+            { "name": "岳南線", "dist": 9.2 }
+        ]
+    },
+    {
+        "company": "静岡鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "静岡清水線", "dist": 11.0 }
+        ]
+    },
+    {
+        "company": "大井川鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "大井川本線", "dist": 39.5 },
+            { "name": "井川線", "dist": 25.5 }
+        ]
+    },
+    {
+        "company": "遠州鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "遠州鉄道線", "dist": 17.8 }
+        ]
+    },
+    {
+        "company": "東海交通事業",
+        "category": "私鉄",
+        "lines": [
+            { "name": "城北線", "dist": 11.2 }
+        ]
+    },
+    {
+        "company": "名古屋臨海高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "あおなみ線", "dist": 15.2 }
+        ]
+    },
+    {
+        "company": "愛知環状鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "愛知環状鉄道線", "dist": 45.3 }
+        ]
+    },
+    {
+        "company": "豊橋鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東田本線", "dist": 4.8 },
+            { "name": "東田本線（井原-運動公園前）", "dist": 0.6 },
+            { "name": "渥美線", "dist": 18.0 }
+        ]
+    },
+    {
+        "company": "愛知高速交通（リニモ）",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東部丘陵線", "dist": 8.9 }
+        ]
+    },
+    {
+        "company": "名古屋市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東山線", "dist": 20.6 },
+            { "name": "名港線", "dist": 6.0 },
+            { "name": "名城線", "dist": 26.4 },
+            { "name": "鶴舞線", "dist": 20.4 },
+            { "name": "桜通線", "dist": 19.1 },
+            { "name": "上飯田線", "dist": 0.8 }
+        ]
+    },
+    {
+        "company": "伊勢鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "伊勢線", "dist": 22.3 }
+        ]
+    },
+    {
+        "company": "三岐鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "三岐線", "dist": 26.6 },
+            { "name": "北勢線", "dist": 20.4 }
+        ]
+    },
+    {
+        "company": "四日市あすなろう鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "内部線", "dist": 5.7 },
+            { "name": "八王子線", "dist": 1.3 }
+        ]
+    },
+    {
+        "company": "伊賀鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "伊賀線", "dist": 16.6 }
+        ]
+    },
+    {
+        "company": "信楽高原鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "信楽線", "dist": 14.7 }
+        ]
+    },
+    {
+        "company": "近江鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 47.7 },
+            { "name": "八日市線", "dist": 9.3 },
+            { "name": "多賀線", "dist": 2.5 }
+        ]
+    },
+    {
+        "company": "嵯峨野観光鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "嵯峨野観光線", "dist": 14.7 }
+        ]
+    },
+    {
+        "company": "京都丹後鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "宮福線", "dist": 30.4 },
+            { "name": "宮津線", "dist": 24.7 },
+            { "name": "宮豊線", "dist": 58.9 }
+        ]
+    },
+    {
+        "company": "京都市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "烏丸線", "dist": 13.7 },
+            { "name": "東西線", "dist": 17.5 }
+        ]
+    },
+    {
+        "company": "京福電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "嵐山本線", "dist": 7.2 },
+            { "name": "北野線", "dist": 3.8 }
+        ]
+    },
+    {
+        "company": "叡山電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "叡山本線", "dist": 5.6 },
+            { "name": "鞍馬線", "dist": 8.8 }
+        ]
+    },
+    {
+        "company": "水間鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "水間線", "dist": 5.5 }
+        ]
+    },
+    {
+        "company": "北大阪急行電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "南北線", "dist": 8.4 }
+        ]
+    },
+    {
+        "company": "大阪メトロ",
+        "category": "私鉄",
+        "lines": [
+            { "name": "御堂筋線", "dist": 24.5 },
+            { "name": "谷町線", "dist": 28.3 },
+            { "name": "四ツ橋線", "dist": 11.8 },
+            { "name": "中央線", "dist": 17.9 },
+            { "name": "千日前線", "dist": 13.1 },
+            { "name": "堺筋線", "dist": 8.1 },
+            { "name": "長堀鶴見緑地線", "dist": 15.0 },
+            { "name": "今里筋線", "dist": 11.9 },
+            { "name": "南港ポートタウン線（ニュートラム）", "dist": 7.9 }
+        ]
+    },
+    {
+        "company": "阪堺電気軌道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "阪堺線", "dist": 14.1 },
+            { "name": "上町線", "dist": 4.4 }
+        ]
+    },
+    {
+        "company": "大阪高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "大阪モノレール線", "dist": 21.2 },
+            { "name": "彩都線（国際文化公園都市モノレール線）", "dist": 6.8 }
+        ]
+    },
+    {
+        "company": "北条鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "北条線", "dist": 13.6 }
+        ]
+    },
+    {
+        "company": "能勢電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "妙見線", "dist": 12.2 },
+            { "name": "日生線", "dist": 2.6 }
+        ]
+    },
+    {
+        "company": "山陽電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 54.7},
+            { "name": "網干線", "dist": 8.5 }
+        ]
+    },
+    {
+        "company": "神戸電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "神戸高速線", "dist": 0.4 },
+            { "name": "有馬線", "dist": 22.5 },
+            { "name": "三田線", "dist": 12.0 },
+            { "name": "公園都市線", "dist": 5.5 },
+            { "name": "粟生線", "dist": 29.2 }
+        ]
+    },
+    {
+        "company": "神戸新交通",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ポートアイランド線", "dist": 8.2},
+            { "name": "ポートアイランド線（市民広場-中埠頭-中公園）", "dist": 2.6 },
+            { "name": "六甲アイランド線", "dist": 4.5 }
+        ]
+    },
+    {
+        "company": "神戸市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "西神・山手線", "dist": 22.7 },
+            { "name": "海岸線", "dist": 7.9 },
+            { "name": "北神線", "dist": 7.5 }
+        ]
+    },
+    {
+        "company": "紀州鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "紀州鉄道線", "dist": 2.7 }
+        ]
+    },
+    {
+        "company": "和歌山電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "貴志川線", "dist": 14.3 }
+        ]
+    },
+    {
+        "company": "智頭急行",
+        "category": "私鉄",
+        "lines": [
+            { "name": "智頭線", "dist": 56.1 }
+        ]
+    },
+    {
+        "company": "若桜鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "若桜線", "dist": 19.2 }
+        ]
+    },
+    {
+        "company": "一畑電車",
+        "category": "私鉄",
+        "lines": [
+            { "name": "北松江線", "dist": 33.9},
+            { "name": "大社線", "dist": 8.3 }
+        ]
+    },
+    {
+        "company": "井原鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "井原線", "dist": 41.7 }
+        ]
+    },
+    {
+        "company": "岡山電気軌道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "東山本線", "dist": 3.1},
+            { "name": "清輝橋線", "dist": 1.6 }
+        ]
+    },
+    {
+        "company": "水島臨海鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "水島本線", "dist": 10.4 }
+        ]
+    },
+    {
+        "company": "広島高速交通",
+        "category": "私鉄",
+        "lines": [
+            { "name": "広島新交通1号線（アストラムライン）", "dist": 18.4 }
+        ]
+    },
+    {
+        "company": "広島電鉄",
+        "category": "私鉄",
+        "lines": [
+            { "name": "本線", "dist": 5.2 },
+            { "name": "宮島線", "dist": 16.1 },
+            { "name": "宇品線", "dist": 5.9 },
+            { "name": "江波線", "dist": 2.6 },
+            { "name": "横川線", "dist": 1.2 },
+            { "name": "白島線", "dist": 1.2 },
+            { "name": "皆実線", "dist": 2.2 },
+            { "name": "循環線", "dist": 1.2 }
+        ]
+    },
+    {
+        "company": "錦川鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "錦川清流線", "dist": 32.7 }
+        ]
+    },
+    {
+        "company": "阿佐海岸鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "阿佐東線", "dist": 8.5 }
+        ]
+    },
+    {
+        "company": "高松琴平電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "琴平線", "dist": 32.9 },
+            { "name": "志度線", "dist": 12.5 },
+            { "name": "長尾線", "dist": 14.6 }
+        ]
+    },
+    {
+        "company": "伊予鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "1系統", "dist": 6.9 },
+            { "name": "3系統", "dist": 1.2 },
+            { "name": "6系統", "dist": 1.5 },
+            { "name": "高浜線", "dist": 9.4 },
+            { "name": "横河原線", "dist": 13.2 },
+            { "name": "郡中線", "dist": 11.3 }
+        ]
+    },
+    {
+        "company": "土佐くろしお鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "中村線", "dist": 43.0 },
+            { "name": "宿毛線", "dist": 23.6 },
+            { "name": "ごめん・なはり線", "dist": 42.7 }
+        ]
+    },
+    {
+        "company": "とさでん交通",
+        "category": "私鉄",
+        "lines": [
+            { "name": "ごめん・伊野線", "dist": 22.1 },
+            { "name": "駅前・桟橋線", "dist": 3.2 }
+        ]
+    },
+    {
+        "company": "甘木鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "甘木線", "dist": 13.7 }
+        ]
+    },
+    {
+        "company": "平成筑豊鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "糸田線", "dist": 6.8 },
+            { "name": "伊田線", "dist": 16.1 },
+            { "name": "田川線", "dist": 26.3 },
+            { "name": "門司港レトロ観光線", "dist": 2.1 }
+        ]
+    },
+    {
+        "company": "福岡市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "空港線", "dist": 13.1 },
+            { "name": "箱崎線", "dist": 4.7 },
+            { "name": "七隈線", "dist": 12.0 }
+        ]
+    },
+    {
+        "company": "北九州高速鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "小倉線", "dist": 8.8 }
+        ]
+    },
+    {
+        "company": "筑豊電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "筑豊電気鉄道線", "dist": 16.0 }
+        ]
+    },
+    {
+        "company": "松浦鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "西九州線", "dist": 93.8 }
+        ]
+    },
+    {
+        "company": "長崎電気軌道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "1系統", "dist": 7.3 },
+            { "name": "3系統", "dist": 0.9 },
+            { "name": "4系統", "dist": 2.2 },
+            { "name": "5系統", "dist": 1.2 }
+        ]
+    },
+    {
+        "company": "島原鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "島原鉄道線", "dist": 43.2 }
+        ]
+    },
+    {
+        "company": "肥薩おれんじ鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "肥薩おれんじ鉄道線", "dist": 116.9 }
+        ]
+    },
+    {
+        "company": "南阿蘇鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "高森線", "dist": 17.7 }
+        ]
+    },
+    {
+        "company": "くま川鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "湯前線", "dist": 24.8 }
+        ]
+    },
+
+    {
+        "company": "熊本電気鉄道",
+        "category": "私鉄",
+        "lines": [
+            { "name": "上熊本線", "dist": 3.4 },
+            { "name": "藤崎線", "dist": 9.7 }
+        ]
+    },
+    {
+        "company": "福岡市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "空港線", "dist": 13.1 },
+            { "name": "箱崎線", "dist": 4.7 },
+            { "name": "七隈線", "dist": 12.0 }
+        ]
+    },
+    {
+        "company": "熊本市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "A系統", "dist": 9.2 },
+            { "name": "B系統", "dist": 2.9 }
+        ]
+    },
+    {
+        "company": "鹿児島市交通局",
+        "category": "私鉄",
+        "lines": [
+            { "name": "1系統", "dist": 9.4 },
+            { "name": "2系統", "dist": 3.7 }
+        ]
+    },
+   {
+        "company": "ゆいレール",
+        "category": "私鉄",
+        "lines": [
+            { "name": "沖縄都市モノレール線", "dist": 17.0 }
+        ]
+    }
+    
+]
