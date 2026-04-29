@@ -165,13 +165,13 @@
         const saved = localStorage.getItem('railway_data_v2');
         if (saved) {
             trainRecords = JSON.parse(saved);
-            updateDisplay();
         }
         fetch('lines.json')
             .then(res => res.json())
             .then(data => {
                 masterLines = data;
                 populateCompanySelect();
+                updateDisplay();
             });
         document.getElementById('ride-date').valueAsDate = new Date();
     };
