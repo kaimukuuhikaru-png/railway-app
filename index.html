@@ -879,14 +879,15 @@
                         <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">乗車履歴</div>
                         ${hist.length > 0 ? hist.map((h, hi) => {
                             const parts = h.section.split('〜');
-                            const from = parts[0] || h.section;
-                            const to = parts[1] || '';
+                            const from = parts[0] ? parts[0].trim() : '';
+                            const to = parts[1] ? parts[1].trim() : '';
                             const origIdx = window.trainRecords.indexOf(h);
+                            const sectionDisplay = to
+                                ? `<span class="h-from">${from}</span><span class="h-sep">〜</span><span class="h-to">${to}</span>`
+                                : `<span class="h-from" style="grid-column:span 3">${from}</span>`;
                             return `<div class="history-row">
                                 <span style="color:var(--text-muted);font-size:11px;">${h.date}</span>
-                                <span class="h-from">${from}</span>
-                                <span class="h-sep">〜</span>
-                                <span class="h-to">${to}</span>
+                                ${sectionDisplay}
                                 <span class="h-dist" style="color:var(--accent)">${h.ride}km</span>
                                 <button onclick="editFromView(${origIdx})" style="background:none;border:1px solid rgba(251,191,36,0.4);color:var(--gold);border-radius:4px;padding:2px 8px;font-size:10px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">編集</button>
                             </div>`;
