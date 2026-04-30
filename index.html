@@ -318,7 +318,11 @@
             border: 1px solid rgba(251,191,36,0.3);
         }
         .history-area { display: none; background: var(--surface2); padding: 12px; margin-top: 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 10px; color: var(--text-muted); }
-        .history-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 4px 0; }
+        .history-row { display: grid; grid-template-columns: 90px 1fr 16px 1fr 60px 44px; gap: 6px; align-items: center; border-bottom: 1px solid var(--border); padding: 6px 0; }
+        .history-row .h-from { text-align: right; }
+        .history-row .h-sep { text-align: center; color: var(--text-muted); }
+        .history-row .h-to { text-align: left; }
+        .history-row .h-dist { text-align: right; white-space: nowrap; }
 
         #show-all-btn {
             width: 100%;
@@ -873,7 +877,20 @@
                     </div>
                     <div id="${id}" class="history-area">
                         <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">乗車履歴</div>
-                        ${hist.length > 0 ? hist.map(h => `<div class="history-row"><span>${h.date}</span><span>${h.section}</span><span>${h.ride}km</span></div>`).join('') : '<div style="color:var(--text-muted);font-size:12px;padding:4px 0;">履歴なし</div>'}
+                        ${hist.length > 0 ? hist.map((h, hi) => {
+                            const parts = h.section.split('〜');
+                            const from = parts[0] || h.section;
+                            const to = parts[1] || '';
+                            const origIdx = window.trainRecords.indexOf(h);
+                            return `<div class="history-row">
+                                <span style="color:var(--text-muted);font-size:11px;">${h.date}</span>
+                                <span class="h-from">${from}</span>
+                                <span class="h-sep">〜</span>
+                                <span class="h-to">${to}</span>
+                                <span class="h-dist" style="color:var(--accent)">${h.ride}km</span>
+                                <button onclick="editFromView(${origIdx})" style="background:none;border:1px solid rgba(251,191,36,0.4);color:var(--gold);border-radius:4px;padding:2px 8px;font-size:10px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">編集</button>
+                            </div>`;
+                        }).join('') : '<div style="color:var(--text-muted);font-size:12px;padding:4px 0;">履歴なし</div>'}
                     </div>`;
                 linesContainer.appendChild(card);
             });
@@ -884,6 +901,12 @@
     window.toggleCard = function(id) {
         const el = document.getElementById(id);
         el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    };
+
+    window.editFromView = function(idx) {
+        // 記録入力タブに切り替えてから編集モードに
+        showPage('input');
+        setTimeout(() => edit(idx), 100);
     };
 
     window.toggleCompany = function(id) {
