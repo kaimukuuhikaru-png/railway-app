@@ -394,6 +394,8 @@
         <div class="tab-container">
             <button id="btn-input" class="tab-button active" onclick="showPage('input')">記録入力</button>
             <button id="btn-view" class="tab-button" onclick="showPage('view')">全線閲覧</button>
+            <button id="btn-ranking" class="tab-button" onclick="showPage('ranking')">ランキング</button>
+            <button id="btn-settings" class="tab-button" onclick="showPage('settings')">設定</button>
         </div>
 
         <div id="page-input">
@@ -478,14 +480,36 @@
             </div>
             <div id="full-line-list"></div>
         </div>
+
+        <!-- ランキング画面 -->
+        <div id="page-ranking" style="display:none;">
+            <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">全ユーザーランキング</div>
+            <div id="ranking-list"></div>
+        </div>
+
+        <!-- 設定画面 -->
+        <div id="page-settings" style="display:none;">
+            <div class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
+                <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">ニックネーム</div>
+                <input type="text" id="nickname-input" placeholder="ニックネームを入力">
+                <button onclick="saveNickname()" class="submit-btn" style="margin-top:12px;padding:12px;font-size:14px;">保存する</button>
+            </div>
+            <div class="card" style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
+                <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text-muted);margin-bottom:16px;">パスワード変更</div>
+                <input type="password" id="new-password" placeholder="新しいパスワード（6文字以上）" style="margin-bottom:10px;">
+                <input type="password" id="new-password-confirm" placeholder="新しいパスワード（確認）">
+                <p id="password-msg" style="font-size:12px;text-align:center;min-height:18px;margin-top:8px;"></p>
+                <button onclick="changePassword()" class="submit-btn" style="margin-top:4px;padding:12px;font-size:14px;background:linear-gradient(135deg,var(--accent2),#6366f1);">パスワードを変更する</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut }
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updatePassword }
         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc }
+    import { getFirestore, doc, getDoc, setDoc, collection, getDocs }
         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -522,6 +546,7 @@
             document.getElementById('user-bar').style.display = 'flex';
             document.getElementById('user-email-label').textContent = user.email;
             await loadFromFirestore(user.uid);
+            await loadNickname(user.uid);
             fetch('lines.json').then(r => r.json()).then(data => {
                 window.masterLines = data;
                 populateCompanySelect();
@@ -544,6 +569,94 @@
     window.save = async function() {
         if (!currentUser) return;
         await setDoc(doc(db, "users", currentUser.uid), { records: window.trainRecords });
+        // ランキング用データも更新
+        await updateRankingData();
+    };
+
+    async function updateRankingData() {
+        if (!currentUser || !window.masterLines.length) return;
+        let totalNet = 0, totalR = 0;
+        window.masterLines.forEach(c => { totalNet += c.lines.reduce((s, l) => s + l.dist, 0); });
+        window.trainRecords.forEach(r => { totalR += r.ride; });
+        const pct = totalNet > 0 ? (totalR / totalNet) * 100 : 0;
+        const nickname = document.getElementById('nickname-input') ? document.getElementById('nickname-input').value || currentUser.email : currentUser.email;
+        await setDoc(doc(db, "ranking", currentUser.uid), {
+            nickname: nickname,
+            totalKm: totalR,
+            percent: pct,
+            recordCount: window.trainRecords.length,
+            updatedAt: new Date().toISOString()
+        });
+    }
+
+    async function loadNickname(uid) {
+        const snap = await getDoc(doc(db, "ranking", uid));
+        if (snap.exists() && snap.data().nickname) {
+            const el = document.getElementById('nickname-input');
+            if (el) el.value = snap.data().nickname;
+        }
+    }
+
+    window.saveNickname = async function() {
+        if (!currentUser) return;
+        const nickname = document.getElementById('nickname-input').value.trim();
+        if (!nickname) { alert('ニックネームを入力してください'); return; }
+        await updateRankingData();
+        alert('ニックネームを保存しました！');
+    };
+
+    window.changePassword = async function() {
+        const pw = document.getElementById('new-password').value;
+        const pw2 = document.getElementById('new-password-confirm').value;
+        const msg = document.getElementById('password-msg');
+        if (pw.length < 6) { msg.style.color = 'var(--danger)'; msg.textContent = 'パスワードは6文字以上にしてください'; return; }
+        if (pw !== pw2) { msg.style.color = 'var(--danger)'; msg.textContent = 'パスワードが一致しません'; return; }
+        try {
+            await updatePassword(currentUser, pw);
+            msg.style.color = 'var(--success)';
+            msg.textContent = 'パスワードを変更しました！';
+            document.getElementById('new-password').value = '';
+            document.getElementById('new-password-confirm').value = '';
+        } catch(e) {
+            msg.style.color = 'var(--danger)';
+            msg.textContent = '変更に失敗しました。再ログインが必要な場合があります。';
+        }
+    };
+
+    window.renderRanking = async function() {
+        const cont = document.getElementById('ranking-list');
+        if (!cont) return;
+        cont.innerHTML = '<div style="color:var(--text-muted);font-size:12px;text-align:center;padding:20px;">読み込み中...</div>';
+        const snap = await getDocs(collection(db, "ranking"));
+        const users = [];
+        snap.forEach(d => users.push({ uid: d.id, ...d.data() }));
+        users.sort((a, b) => b.percent - a.percent);
+        cont.innerHTML = '';
+        users.forEach((u, i) => {
+            const isMe = u.uid === currentUser.uid;
+            const medals = ['🥇', '🥈', '🥉'];
+            const rank = i < 3 ? medals[i] : `${i + 1}位`;
+            const div = document.createElement('div');
+            div.style.cssText = `background:${isMe ? 'rgba(56,189,248,0.08)' : 'var(--surface)'};border:1px solid ${isMe ? 'var(--accent)' : 'var(--border)'};border-radius:12px;padding:14px 16px;margin-bottom:8px;`;
+            div.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <span style="font-family:'Rajdhani',sans-serif;font-size:20px;">${rank}</span>
+                        <div>
+                            <div style="font-weight:700;font-size:14px;">${u.nickname}${isMe ? ' <span style="font-size:10px;color:var(--accent);">（あなた）</span>' : ''}</div>
+                            <div style="font-size:11px;color:var(--text-muted);">${u.recordCount}件 · ${u.totalKm.toFixed(1)}km</div>
+                        </div>
+                    </div>
+                    <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:${isMe ? 'var(--accent)' : 'var(--text)'};">${u.percent.toFixed(1)}%</div>
+                </div>
+                <div style="background:var(--surface2);height:4px;border-radius:2px;margin-top:10px;overflow:hidden;">
+                    <div style="height:100%;width:${u.percent}%;background:${isMe ? 'linear-gradient(90deg,var(--accent),var(--accent2))' : 'var(--border)'};border-radius:2px;"></div>
+                </div>`;
+            cont.appendChild(div);
+        });
+        if (users.length === 0) {
+            cont.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:40px;">まだデータがありません</div>';
+        }
     };
 
     window.authAction = async function() {
@@ -581,13 +694,14 @@
     };
 
     window.showPage = function(pageId) {
-        const isInput = pageId === 'input';
-        document.getElementById('page-input').style.display = isInput ? 'block' : 'none';
-        document.getElementById('page-view').style.display = isInput ? 'none' : 'block';
-        document.getElementById('btn-input').classList.toggle('active', isInput);
-        document.getElementById('btn-view').classList.toggle('active', !isInput);
-        if (!isInput) renderFullList();
-        if (isInput) updateChart();
+        ['input','view','ranking','settings'].forEach(p => {
+            document.getElementById('page-' + p).style.display = p === pageId ? 'block' : 'none';
+            document.getElementById('btn-' + p).classList.toggle('active', p === pageId);
+        });
+        if (pageId === 'view') renderFullList();
+        if (pageId === 'input') updateChart();
+        if (pageId === 'ranking') renderRanking();
+        if (pageId === 'settings') loadNickname(currentUser.uid);
     };
 
     window.updateSection = function() {
