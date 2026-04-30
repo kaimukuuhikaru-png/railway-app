@@ -471,6 +471,11 @@
         </div>
 
         <div id="page-view" style="display:none;">
+            <div style="margin-bottom:12px;">
+                <input type="text" id="view-search" placeholder="会社名・路線名を検索..."
+                    oninput="renderFullList()"
+                    style="border-radius:20px;">
+            </div>
             <div id="full-line-list"></div>
         </div>
     </div>
@@ -827,7 +832,13 @@
         const cont = document.getElementById('full-line-list');
         if (!cont) return;
         cont.innerHTML = "";
+        const searchEl = document.getElementById('view-search');
+        const q = searchEl ? searchEl.value.toLowerCase() : '';
         window.masterLines.forEach((co, cIdx) => {
+            // 検索フィルター
+            const companyMatch = co.company.toLowerCase().includes(q);
+            const matchedLines = q ? co.lines.filter(l => companyMatch || l.name.toLowerCase().includes(q)) : co.lines;
+            if (q && matchedLines.length === 0) return;
             let total = 0, ridden = 0;
             co.lines.forEach(l => {
                 total += l.dist;
@@ -855,7 +866,11 @@
             linesContainer.id = companyId;
             linesContainer.style.display = 'none';
 
-            co.lines.forEach((line, lIdx) => {
+            // 検索中は自動展開
+            if (q) linesContainer.style.display = 'block';
+
+            matchedLines.forEach((line) => {
+                const lIdx = co.lines.indexOf(line);
                 const tname = `${co.company} ${line.name}`;
                 const hist = window.trainRecords.filter(r => r.name === tname).sort((a, b) => new Date(a.date) - new Date(b.date));
                 const rd = hist.reduce((s, r) => s + r.ride, 0);
