@@ -7,97 +7,384 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#007bff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0a0f1e">
     <style>
-        body { font-family: sans-serif; margin: 15px; background-color: #f0f2f5; color: #333; line-height: 1.4; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        h1 { text-align: center; color: #007bff; font-size: 22px; margin-bottom: 20px; }
+        :root {
+            --bg: #0a0f1e;
+            --surface: #111827;
+            --surface2: #1a2235;
+            --border: #1e3a5f;
+            --accent: #38bdf8;
+            --accent2: #818cf8;
+            --accent-glow: rgba(56,189,248,0.15);
+            --text: #e2e8f0;
+            --text-muted: #64748b;
+            --success: #34d399;
+            --danger: #f87171;
+            --gold: #fbbf24;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(56,189,248,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(129,140,248,0.05) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
+
+        /* ヘッダー */
+        .app-header { text-align: center; padding: 28px 0 20px; }
+        .app-header h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .app-header .subtitle {
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
 
         /* ログイン画面 */
-        #login-screen { display: flex; flex-direction: column; gap: 12px; }
-        #login-screen h2 { text-align: center; color: #007bff; margin-bottom: 10px; }
-        .auth-input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        .auth-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .auth-btn-login { background: #007bff; color: white; }
-        .auth-btn-register { background: #f8f9fa; color: #007bff; border: 1px solid #007bff; }
-        .auth-error { color: #dc3545; font-size: 13px; text-align: center; }
-        .auth-switch { text-align: center; font-size: 13px; color: #666; }
-        .auth-switch a { color: #007bff; cursor: pointer; text-decoration: underline; }
+        #login-screen { display: flex; flex-direction: column; gap: 14px; max-width: 400px; margin: 20px auto; }
+        .login-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 28px; }
+        #auth-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+        .auth-input {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 15px;
+            font-family: 'Noto Sans JP', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 12px;
+        }
+        .auth-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: opacity 0.2s, transform 0.1s;
+            letter-spacing: 1px;
+        }
+        .auth-btn:active { transform: scale(0.98); }
+        .auth-btn-login { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0a0f1e; margin-top: 4px; }
+        .auth-error { color: var(--danger); font-size: 12px; text-align: center; min-height: 18px; }
+        .auth-switch { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 16px; }
+        .auth-switch a { color: var(--accent); cursor: pointer; text-decoration: none; font-weight: 700; }
 
-        /* ユーザー情報バー */
-        #user-bar { display: none; justify-content: space-between; align-items: center; background: #e7f3ff; padding: 8px 12px; border-radius: 10px; margin-bottom: 15px; font-size: 13px; }
-        #user-bar span { color: #333; }
-        #logout-btn { background: none; border: 1px solid #dc3545; color: #dc3545; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        /* ユーザーバー */
+        #user-bar {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        #logout-btn {
+            background: none;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
 
-        /* タブ切り替え */
-        .tab-container { display: flex; gap: 8px; margin-bottom: 20px; }
-        .tab-button { flex: 1; padding: 15px 10px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: #e9ecef; color: #666; font-size: 14px; }
-        .tab-button.active { background: #007bff; color: white; }
+        /* 進捗 */
+        .progress-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+        }
+        .progress-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+        .progress-pct {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .progress-bar-bg { background: var(--surface2); height: 8px; border-radius: 4px; overflow: hidden; margin: 12px 0 6px; }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .progress-km { font-size: 12px; color: var(--text-muted); }
+        .sub-stats { display: flex; gap: 16px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+        .sub-stat { flex: 1; text-align: center; }
+        .sub-stat-label { font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+        .sub-stat-val { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); }
 
-        /* 入力フォーム（モバイル最適化） */
-        .input-group { background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; }
-        .input-group p { margin: 12px 0 6px; font-weight: bold; font-size: 14px; }
-        select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 16px !important; }
+        /* タブ */
+        .tab-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 6px;
+        }
+        .tab-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-family: 'Noto Sans JP', sans-serif;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .tab-button.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #0a0f1e; }
+
+        /* 入力フォーム */
+        .input-group { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+        .input-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin: 16px 0 6px; display: block; }
+        .input-label:first-of-type { margin-top: 0; }
+
+        select, input[type="date"], input[type="text"], input[type="number"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-size: 15px !important;
+            font-family: 'Noto Sans JP', sans-serif;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            -webkit-appearance: none;
+        }
+        select:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        select option { background: var(--surface2); }
+
         .flex-row { display: flex; gap: 10px; }
-        .flex-row div { flex: 1; }
-        .submit-btn { margin-top: 20px; width: 100%; background: #28a745; color: white; padding: 16px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(40,167,69,0.2); }
+        .flex-row > div { flex: 1; }
 
-        /* 進捗表示 */
-        .progress-section { text-align: center; margin-bottom: 20px; padding: 15px; background: #e7f3ff; border-radius: 12px; }
-        .progress-bar-bg { background: #ddd; height: 12px; border-radius: 6px; overflow: hidden; margin: 8px 0; }
-        .progress-bar-fill { background: #007bff; height: 100%; width: 0%; transition: width 0.5s; }
+        .submit-btn {
+            margin-top: 20px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: #0a0f1e;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+            letter-spacing: 1px;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 4px 20px rgba(52,211,153,0.2);
+        }
+        .submit-btn:active { transform: scale(0.98); }
 
-        /* 閲覧画面用 */
-        .company-title { margin-top: 25px; border-bottom: 2px solid #007bff; padding-bottom: 8px; color: #007bff; font-size: 18px; }
-        .line-card { padding: 15px 0; border-bottom: 1px solid #eee; cursor: pointer; }
-        .badge-complete { background: #ffd700; color: #8b4513; font-size: 10px; padding: 3px 8px; border-radius: 10px; font-weight: bold; margin-left: 8px; border: 1px solid #daa520; }
-        .history-area { display: none; background: #fcfcfc; padding: 12px; margin-top: 10px; font-size: 13px; border: 1px dashed #ccc; border-radius: 8px; }
+        /* グラフ */
+        .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+        .chart-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+        .chart-controls { display: flex; justify-content: space-between; margin-bottom: 14px; }
 
-        /* バックアップエリア */
-        .backup-section { margin-top: 30px; padding: 15px; border: 1px dashed #6c757d; border-radius: 10px; background: #f8f9fa; text-align: center; }
-        .btn-small { background: #6c757d; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; margin: 5px; }
+        /* リスト */
+        .list-header { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 10px; }
+        .list-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); }
+        .search-input { width: 48%; padding: 8px 14px !important; font-size: 13px !important; border-radius: 20px !important; }
 
         ul { list-style: none; padding: 0; }
-        li { background: #fff; border: 1px solid #eee; padding: 12px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+        li {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+        li:hover { border-color: var(--accent); }
+        li .rec-date { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 3px; }
+        li .rec-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+        li .rec-section { font-size: 12px; color: var(--accent); }
 
-        /* ローディング */
-        #loading { text-align: center; padding: 40px; color: #666; }
+        .btn-small {
+            background: var(--surface2);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 3px;
+            transition: all 0.2s;
+        }
+        .btn-small:hover { border-color: var(--accent); color: var(--accent); }
+
+        .backup-section { background: var(--surface); border: 1px dashed var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-top: 16px; }
+        .backup-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+
+        /* 全線閲覧 */
+        .company-title {
+            margin-top: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            color: var(--accent);
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .company-title small { font-size: 12px; color: var(--text-muted); font-weight: 400; }
+        .line-card { padding: 14px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .line-name { font-size: 14px; font-weight: 700; transition: color 0.2s; }
+        .line-card:hover .line-name { color: var(--accent); }
+        .line-pct { font-size: 14px; font-weight: 700; color: var(--text-muted); }
+        .line-pct.complete { color: var(--gold); }
+        .badge-complete {
+            background: rgba(251,191,36,0.15);
+            color: var(--gold);
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-left: 8px;
+            border: 1px solid rgba(251,191,36,0.3);
+        }
+        .history-area { display: none; background: var(--surface2); padding: 12px; margin-top: 10px; font-size: 12px; border: 1px solid var(--border); border-radius: 10px; color: var(--text-muted); }
+        .history-row { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 4px 0; }
+
+        #show-all-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 13px;
+            display: none;
+            margin-top: 4px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        #show-all-btn:hover { border-color: var(--accent); background: var(--accent-glow); }
+
+        #loading { text-align: center; padding: 60px 20px; }
+        .loading-dot { display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin: 0 4px; animation: pulse 1.2s ease-in-out infinite; }
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; background: var(--accent2); }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes pulse { 0%,80%,100%{opacity:0.2;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🚃 鉄道完乗記録</h1>
+    <div class="app-header">
+        <h1>🚃 Rail Tracker</h1>
+        <div class="subtitle">鉄道完乗管理システム</div>
+    </div>
 
-    <!-- ローディング中 -->
-    <div id="loading">読み込み中...</div>
+    <div id="loading">
+        <span class="loading-dot"></span>
+        <span class="loading-dot"></span>
+        <span class="loading-dot"></span>
+    </div>
 
     <!-- ログイン画面 -->
     <div id="login-screen" style="display:none;">
-        <h2 id="auth-title">ログイン</h2>
-        <input class="auth-input" type="email" id="auth-email" placeholder="メールアドレス">
-        <input class="auth-input" type="password" id="auth-password" placeholder="パスワード">
-        <p class="auth-error" id="auth-error"></p>
-        <button class="auth-btn auth-btn-login" id="auth-main-btn" onclick="authAction()">ログイン</button>
-        <p class="auth-switch" id="auth-switch-text">
-            アカウントがない方は <a onclick="toggleAuthMode()">新規登録</a>
-        </p>
+        <div class="login-card">
+            <h2 id="auth-title">Login</h2>
+            <input class="auth-input" type="email" id="auth-email" placeholder="メールアドレス">
+            <input class="auth-input" type="password" id="auth-password" placeholder="パスワード（6文字以上）">
+            <p class="auth-error" id="auth-error"></p>
+            <button class="auth-btn auth-btn-login" id="auth-main-btn" onclick="authAction()">ログイン</button>
+            <p class="auth-switch" id="auth-switch-text">
+                アカウントがない方は <a onclick="toggleAuthMode()">新規登録</a>
+            </p>
+        </div>
     </div>
 
     <!-- メインアプリ -->
     <div id="main-app" style="display:none;">
 
-        <!-- ユーザー情報バー -->
         <div id="user-bar">
             <span id="user-email-label"></span>
             <button id="logout-btn" onclick="logout()">ログアウト</button>
         </div>
 
         <div class="progress-section">
-            <div style="font-weight: bold;">全線踏破へ 現在の記録 <span id="total-result">0%</span></div>
+            <div class="progress-label">全線踏破進捗</div>
+            <div class="progress-pct" id="total-result">0.00%</div>
             <div class="progress-bar-bg"><div id="total-progress-bar" class="progress-bar-fill"></div></div>
-            <small id="total-stats">0 / 0 km</small>
-            <div id="sub-stats"></div>
+            <div class="progress-km" id="total-stats">0 / 0 km</div>
+            <div class="sub-stats" id="sub-stats"></div>
         </div>
 
         <div class="tab-container">
@@ -105,41 +392,46 @@
             <button id="btn-view" class="tab-button" onclick="showPage('view')">全線閲覧</button>
         </div>
 
-        <!-- 入力画面 -->
         <div id="page-input">
             <div class="input-group">
-                <p>1. 鉄道会社を選択:</p>
+                <span class="input-label">鉄道会社</span>
                 <select id="company-select" onchange="updateLineOptions()">
                     <option value="">--- 会社を選択してください ---</option>
                 </select>
-
-                <p>2. 路線を選択:</p>
+                <span class="input-label">路線</span>
                 <select id="line-select" onchange="updateTotal()">
                     <option value="0">--- 先に会社を選んでください ---</option>
                 </select>
-
-                <p>3. 乗車日:</p>
+                <span class="input-label">乗車日</span>
                 <input type="date" id="ride-date">
-
-                <p>4. 乗車区間（任意）:</p>
-                <input type="text" id="ride-section" placeholder="例：大阪梅田〜高槻市">
-
                 <div class="flex-row">
                     <div>
-                        <p>5. 全長(km):</p>
-                        <input type="number" id="total-dist" readonly style="background: #eee;" placeholder="自動入力">
+                        <span class="input-label">乗車駅（任意）</span>
+                        <input type="text" id="ride-from" placeholder="例：新大阪" oninput="updateSection()">
                     </div>
                     <div>
-                        <p>6. 今回の乗車(km):</p>
+                        <span class="input-label">降車駅（任意）</span>
+                        <input type="text" id="ride-to" placeholder="例：東京" oninput="updateSection()">
+                    </div>
+                </div>
+                <span class="input-label">乗車区間（自動入力）</span>
+                <input type="text" id="ride-section" placeholder="自動入力されます" readonly style="opacity:0.5;">
+                <div class="flex-row" style="margin-top:4px;">
+                    <div>
+                        <span class="input-label">全長 (km)</span>
+                        <input type="number" id="total-dist" readonly style="opacity:0.5;" placeholder="自動入力">
+                    </div>
+                    <div>
+                        <span class="input-label">今回の乗車 (km)</span>
                         <input type="number" id="ride-dist" step="0.1" inputmode="decimal" placeholder="例：13.2">
                     </div>
                 </div>
                 <button class="submit-btn" onclick="addRecord()">記録を保存する</button>
             </div>
 
-            <div style="background: white; padding: 10px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px;">
-                <h3 style="margin-top: 0; font-size: 15px;">累計乗車距離の推移</h3>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+            <div class="chart-card">
+                <div class="chart-title">累計乗車距離の推移</div>
+                <div class="chart-controls">
                     <div>
                         <button onclick="changeRange(3)" class="btn-small">3年</button>
                         <button onclick="changeRange(10)" class="btn-small">10年</button>
@@ -153,44 +445,33 @@
                 <canvas id="ride-chart"></canvas>
             </div>
 
-            <h3>年別乗車距離</h3>
-            <canvas id="yearly-chart"></canvas>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
-                <h3 style="margin: 0; font-size: 16px;">最近の記録</h3>
-                <input type="text" id="search-input" placeholder="会社・路線を検索..."
-                    oninput="updateDisplay()"
-                    style="width: 50%; padding: 6px 10px; font-size: 13px; border-radius: 20px; border: 1px solid #ccc;">
+            <div class="chart-card">
+                <div class="chart-title">年別乗車距離</div>
+                <canvas id="yearly-chart"></canvas>
             </div>
 
+            <div class="list-header">
+                <span class="list-title">最近の記録</span>
+                <input type="text" id="search-input" class="search-input" placeholder="路線を検索..." oninput="updateDisplay()">
+            </div>
             <ul id="record-list"></ul>
-
-            <button id="show-all-btn" onclick="toggleShowAll()" class="btn-small"
-                    style="width: 100%; padding: 10px; background: #f0f2f5; color: #007bff; border: 1px solid #007bff; display: none;">
-                すべての記録を表示する
-            </button>
+            <button id="show-all-btn" onclick="toggleShowAll()">すべての記録を表示する</button>
 
             <div class="backup-section">
-                <p style="margin: 0 0 10px; font-size: 13px; font-weight: bold;">📊 データ管理</p>
+                <div class="backup-title">データ管理</div>
                 <button class="btn-small" onclick="exportData()">バックアップ保存</button>
-                <label class="btn-small">
-                    データ復旧
-                    <input type="file" style="display: none;" onchange="importData(event)">
-                </label>
+                <label class="btn-small" style="cursor:pointer;">データ復旧<input type="file" style="display:none;" onchange="importData(event)"></label>
                 <br>
-                <button onclick="clearAll()" style="background:none; border:none; color:#dc3545; cursor:pointer; font-size:11px; margin-top:10px;">[全データを削除]</button>
+                <button onclick="clearAll()" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:11px;margin-top:12px;font-family:'Noto Sans JP',sans-serif;">[全データを削除]</button>
             </div>
         </div>
 
-        <!-- 閲覧画面 -->
         <div id="page-view" style="display:none;">
             <div id="full-line-list"></div>
         </div>
-
-    </div><!-- /main-app -->
+    </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut }
@@ -198,7 +479,6 @@
     import { getFirestore, doc, getDoc, setDoc }
         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // ★ あなたのFirebaseの設定
     const firebaseConfig = {
         apiKey: "AIzaSyCi-0sXdMw0bNcQf4Xxeb_RqGh39ZZzXRg",
         authDomain: "railway-app-a9717.firebaseapp.com",
@@ -213,7 +493,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- グローバル変数 ---
     window.trainRecords = [];
     window.masterLines = [];
     window.myChart = null;
@@ -225,7 +504,6 @@
     let currentUser = null;
     let isRegisterMode = false;
 
-    // --- 認証状態の監視 ---
     onAuthStateChanged(auth, async (user) => {
         document.getElementById('loading').style.display = 'none';
         if (user) {
@@ -234,19 +512,12 @@
             document.getElementById('main-app').style.display = 'block';
             document.getElementById('user-bar').style.display = 'flex';
             document.getElementById('user-email-label').textContent = user.email;
-
-            // Firestoreからデータ読み込み
             await loadFromFirestore(user.uid);
-
-            // lines.json読み込み
-            fetch('lines.json')
-                .then(res => res.json())
-                .then(data => {
-                    window.masterLines = data;
-                    populateCompanySelect();
-                    updateDisplay();
-                });
-
+            fetch('lines.json').then(r => r.json()).then(data => {
+                window.masterLines = data;
+                populateCompanySelect();
+                updateDisplay();
+            });
             document.getElementById('ride-date').valueAsDate = new Date();
         } else {
             currentUser = null;
@@ -256,42 +527,25 @@
         }
     });
 
-    // --- Firestoreからデータ読み込み ---
     async function loadFromFirestore(uid) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            window.trainRecords = docSnap.data().records || [];
-        } else {
-            window.trainRecords = [];
-        }
+        const snap = await getDoc(doc(db, "users", uid));
+        window.trainRecords = snap.exists() ? (snap.data().records || []) : [];
     }
 
-    // --- Firestoreへ保存 ---
     window.save = async function() {
         if (!currentUser) return;
-        const docRef = doc(db, "users", currentUser.uid);
-        await setDoc(docRef, { records: window.trainRecords });
+        await setDoc(doc(db, "users", currentUser.uid), { records: window.trainRecords });
     };
 
-    // --- ログイン / 新規登録 ---
     window.authAction = async function() {
         const email = document.getElementById('auth-email').value.trim();
         const password = document.getElementById('auth-password').value;
         const errEl = document.getElementById('auth-error');
         errEl.textContent = '';
-
-        if (!email || !password) {
-            errEl.textContent = 'メールアドレスとパスワードを入力してください';
-            return;
-        }
-
+        if (!email || !password) { errEl.textContent = 'メールアドレスとパスワードを入力してください'; return; }
         try {
-            if (isRegisterMode) {
-                await createUserWithEmailAndPassword(auth, email, password);
-            } else {
-                await signInWithEmailAndPassword(auth, email, password);
-            }
+            if (isRegisterMode) await createUserWithEmailAndPassword(auth, email, password);
+            else await signInWithEmailAndPassword(auth, email, password);
         } catch (e) {
             const msgs = {
                 'auth/invalid-email': 'メールアドレスの形式が正しくありません',
@@ -301,20 +555,15 @@
                 'auth/weak-password': 'パスワードは6文字以上にしてください',
                 'auth/invalid-credential': 'メールアドレスまたはパスワードが間違っています',
             };
-            errEl.textContent = msgs[e.code] || 'エラーが発生しました: ' + e.message;
+            errEl.textContent = msgs[e.code] || 'エラーが発生しました';
         }
     };
 
-    // --- ログアウト ---
-    window.logout = async function() {
-        await signOut(auth);
-        window.trainRecords = [];
-    };
+    window.logout = async function() { await signOut(auth); window.trainRecords = []; };
 
-    // --- 登録/ログイン切り替え ---
     window.toggleAuthMode = function() {
         isRegisterMode = !isRegisterMode;
-        document.getElementById('auth-title').textContent = isRegisterMode ? '新規登録' : 'ログイン';
+        document.getElementById('auth-title').textContent = isRegisterMode ? 'Register' : 'Login';
         document.getElementById('auth-main-btn').textContent = isRegisterMode ? '登録する' : 'ログイン';
         document.getElementById('auth-switch-text').innerHTML = isRegisterMode
             ? 'すでにアカウントをお持ちの方は <a onclick="toggleAuthMode()">ログイン</a>'
@@ -322,12 +571,8 @@
         document.getElementById('auth-error').textContent = '';
     };
 
-    // =====================
-    // アプリの機能（元のコードをそのまま移植）
-    // =====================
-
     window.showPage = function(pageId) {
-        const isInput = (pageId === 'input');
+        const isInput = pageId === 'input';
         document.getElementById('page-input').style.display = isInput ? 'block' : 'none';
         document.getElementById('page-view').style.display = isInput ? 'none' : 'block';
         document.getElementById('btn-input').classList.toggle('active', isInput);
@@ -336,12 +581,20 @@
         if (isInput) updateChart();
     };
 
+    window.updateSection = function() {
+        const from = document.getElementById('ride-from').value.trim();
+        const to = document.getElementById('ride-to').value.trim();
+        const section = document.getElementById('ride-section');
+        if (from && to) section.value = from + '〜' + to;
+        else if (from) section.value = from;
+        else section.value = '';
+    };
+
     window.populateCompanySelect = function() {
         const sel = document.getElementById('company-select');
-        window.masterLines.forEach((item, index) => {
+        window.masterLines.forEach((item, i) => {
             const opt = document.createElement('option');
-            opt.value = index;
-            opt.textContent = item.company;
+            opt.value = i; opt.textContent = item.company;
             sel.appendChild(opt);
         });
     };
@@ -361,7 +614,7 @@
 
     window.updateTotal = function() {
         const val = document.getElementById('line-select').value;
-        document.getElementById('total-dist').value = (val === "0") ? "" : val;
+        document.getElementById('total-dist').value = val === "0" ? "" : val;
     };
 
     window.addRecord = async function() {
@@ -370,37 +623,28 @@
         const rDist = parseFloat(document.getElementById('ride-dist').value);
         const rDate = document.getElementById('ride-date').value;
         const rSect = document.getElementById('ride-section').value;
-
-        if (cSel.value === "" || isNaN(rDist) || !rDate) {
-            alert("入力に不足があります");
-            return;
-        }
-
-        const lineFullText = lSel.options[lSel.selectedIndex].text;
-        const lineNameOnly = lineFullText.split(' (')[0];
-
+        if (cSel.value === "" || isNaN(rDist) || !rDate) { alert("入力に不足があります"); return; }
+        const lineNameOnly = lSel.options[lSel.selectedIndex].text.split(' (')[0];
         const newData = {
             name: `${cSel.options[cSel.selectedIndex].text} ${lineNameOnly}`,
             total: parseFloat(document.getElementById('total-dist').value),
-            ride: rDist,
-            date: rDate,
+            ride: rDist, date: rDate,
             section: rSect || "（区間未入力）"
         };
-
         if (window.editIndex === -1) {
             window.trainRecords.push(newData);
         } else {
             window.trainRecords[window.editIndex] = newData;
             window.editIndex = -1;
-            const submitBtn = document.querySelector('.submit-btn');
-            submitBtn.innerText = "記録を保存する";
-            submitBtn.style.background = "#28a745";
-            submitBtn.style.color = "#fff";
+            const btn = document.querySelector('.submit-btn');
+            btn.textContent = "記録を保存する";
+            btn.style.background = "linear-gradient(135deg, var(--success), #059669)";
         }
-
         await window.save();
         updateDisplay();
         document.getElementById('ride-dist').value = "";
+        document.getElementById('ride-from').value = "";
+        document.getElementById('ride-to').value = "";
         document.getElementById('ride-section').value = "";
         document.activeElement.blur();
         alert("保存が完了しました！");
@@ -408,157 +652,119 @@
 
     window.updateDisplay = function() {
         if (!window.masterLines || window.masterLines.length === 0) return;
-
         const list = document.getElementById('record-list');
         const searchVal = document.getElementById('search-input') ? document.getElementById('search-input').value.toLowerCase() : "";
         if (!list) return;
         list.innerHTML = "";
 
-        let totalNetworkDist = 0, jrNetworkDist = 0, pvtNetworkDist = 0;
-        window.masterLines.forEach(company => {
-            const companyDist = company.lines.reduce((sum, l) => sum + l.dist, 0);
-            totalNetworkDist += companyDist;
-            if (company.category === "JR") jrNetworkDist += companyDist;
-            else pvtNetworkDist += companyDist;
+        let totalNet = 0, jrNet = 0, pvtNet = 0;
+        window.masterLines.forEach(c => {
+            const d = c.lines.reduce((s, l) => s + l.dist, 0);
+            totalNet += d;
+            if (c.category === "JR") jrNet += d; else pvtNet += d;
         });
 
-        let totalRidden = 0, jrRidden = 0, pvtRidden = 0;
+        let totalR = 0, jrR = 0, pvtR = 0;
         window.trainRecords.forEach(rec => {
-            const companyData = window.masterLines.find(c => rec.name.startsWith(c.company));
-            const category = companyData ? companyData.category : "私鉄";
-            totalRidden += rec.ride;
-            if (category === "JR") jrRidden += rec.ride;
-            else pvtRidden += rec.ride;
+            const c = window.masterLines.find(c => rec.name.startsWith(c.company));
+            totalR += rec.ride;
+            if (c && c.category === "JR") jrR += rec.ride; else pvtR += rec.ride;
         });
 
-        const totalP = (totalNetworkDist > 0) ? (totalRidden / totalNetworkDist) * 100 : 0;
+        const totalP = totalNet > 0 ? (totalR / totalNet) * 100 : 0;
         document.getElementById('total-result').innerText = totalP.toFixed(2) + "%";
-        document.getElementById('total-stats').innerText = `${totalRidden.toFixed(1)} / ${totalNetworkDist.toFixed(1)} km`;
+        document.getElementById('total-stats').innerText = `${totalR.toFixed(1)} / ${totalNet.toFixed(1)} km`;
         document.getElementById('total-progress-bar').style.width = totalP + "%";
 
-        const jrP = (jrNetworkDist > 0) ? (jrRidden / jrNetworkDist) * 100 : 0;
-        const pvtP = (pvtNetworkDist > 0) ? (pvtRidden / pvtNetworkDist) * 100 : 0;
+        const jrP = jrNet > 0 ? (jrR / jrNet) * 100 : 0;
+        const pvtP = pvtNet > 0 ? (pvtR / pvtNet) * 100 : 0;
         document.getElementById('sub-stats').innerHTML = `
-            <div style="display: flex; justify-content: space-around; font-size: 11px; color: #666; margin-top: 4px;">
-                <span>JR: ${jrP.toFixed(1)}% (${jrRidden.toFixed(1)}km)</span>
-                <span>私鉄: ${pvtP.toFixed(1)}% (${pvtRidden.toFixed(1)}km)</span>
-            </div>`;
+            <div class="sub-stat"><div class="sub-stat-label">JR</div><div class="sub-stat-val">${jrP.toFixed(1)}%</div><div style="font-size:10px;color:var(--text-muted)">${jrR.toFixed(1)}km</div></div>
+            <div class="sub-stat"><div class="sub-stat-label">私鉄</div><div class="sub-stat-val">${pvtP.toFixed(1)}%</div><div style="font-size:10px;color:var(--text-muted)">${pvtR.toFixed(1)}km</div></div>
+            <div class="sub-stat"><div class="sub-stat-label">記録数</div><div class="sub-stat-val">${window.trainRecords.length}</div><div style="font-size:10px;color:var(--text-muted)">件</div></div>`;
 
-        let filteredRecords = window.trainRecords.map((rec, idx) => ({ ...rec, originalIndex: idx }))
-            .filter(rec => rec.name.toLowerCase().includes(searchVal) || rec.section.toLowerCase().includes(searchVal));
-        filteredRecords.reverse();
+        let filtered = window.trainRecords.map((r, i) => ({ ...r, originalIndex: i }))
+            .filter(r => r.name.toLowerCase().includes(searchVal) || r.section.toLowerCase().includes(searchVal));
+        filtered.reverse();
+        const display = !window.isShowAll && searchVal === "" ? filtered.slice(0, 10) : filtered;
 
-        const needsLimit = !window.isShowAll && searchVal === "";
-        const displayRecords = needsLimit ? filteredRecords.slice(0, 10) : filteredRecords;
-
-        displayRecords.forEach(rec => {
+        display.forEach(rec => {
             const li = document.createElement('li');
             li.innerHTML = `
                 <div>
-                    <small>${rec.date}</small><br>
-                    <strong>${rec.name}</strong><br>
-                    <small>${rec.section} (${rec.ride}km)</small>
+                    <div class="rec-date">${rec.date}</div>
+                    <div class="rec-name">${rec.name}</div>
+                    <div class="rec-section">${rec.section} · ${rec.ride}km</div>
                 </div>
-                <div>
-                    <button onclick="edit(${rec.originalIndex})" class="btn-small" style="background:#ffc107; color:#000;">編集</button>
-                    <button onclick="del(${rec.originalIndex})" class="btn-small" style="background:#dc3545;">削除</button>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                    <button onclick="edit(${rec.originalIndex})" class="btn-small" style="color:var(--gold);border-color:rgba(251,191,36,0.4);">編集</button>
+                    <button onclick="del(${rec.originalIndex})" class="btn-small" style="color:var(--danger);border-color:rgba(248,113,113,0.4);">削除</button>
                 </div>`;
             list.appendChild(li);
         });
 
         const btn = document.getElementById('show-all-btn');
         if (btn) {
-            if (searchVal !== "") {
-                btn.style.display = "none";
-            } else if (filteredRecords.length > 10) {
+            if (searchVal !== "") { btn.style.display = "none"; }
+            else if (filtered.length > 10) {
                 btn.style.display = "block";
-                btn.innerText = window.isShowAll ? "表示件数を戻す (直近10件)" : `すべての記録を表示する (${filteredRecords.length}件)`;
-                btn.style.background = window.isShowAll ? "#f8f9fa" : "#fff";
-            } else {
-                btn.style.display = "none";
-            }
+                btn.textContent = window.isShowAll ? "表示件数を戻す" : `すべての記録を表示する（${filtered.length}件）`;
+            } else { btn.style.display = "none"; }
         }
-
         updateChart();
         updateYearlyChart();
     };
 
-    window.toggleShowAll = function() {
-        window.isShowAll = !window.isShowAll;
-        updateDisplay();
-    };
+    window.toggleShowAll = function() { window.isShowAll = !window.isShowAll; updateDisplay(); };
 
     window.edit = function(idx) {
         const rec = window.trainRecords[idx];
         window.editIndex = idx;
-        const compName = rec.name.split(' ')[0];
-        const cIdx = window.masterLines.findIndex(c => c.company === compName);
+        const cIdx = window.masterLines.findIndex(c => c.company === rec.name.split(' ')[0]);
         if (cIdx !== -1) {
             document.getElementById('company-select').value = cIdx;
             window.updateLineOptions();
             const lSel = document.getElementById('line-select');
             for (let i = 0; i < lSel.options.length; i++) {
-                if (rec.name.includes(lSel.options[i].text.split(' (')[0])) {
-                    lSel.selectedIndex = i;
-                    break;
-                }
+                if (rec.name.includes(lSel.options[i].text.split(' (')[0])) { lSel.selectedIndex = i; break; }
             }
         }
         document.getElementById('ride-date').value = rec.date;
         document.getElementById('ride-section').value = rec.section;
+        const parts = rec.section.split('〜');
+        document.getElementById('ride-from').value = parts[0] || '';
+        document.getElementById('ride-to').value = parts[1] || '';
         document.getElementById('total-dist').value = rec.total;
         document.getElementById('ride-dist').value = rec.ride;
-        const submitBtn = document.querySelector('.submit-btn');
-        submitBtn.innerText = "変更を上書き保存する";
-        submitBtn.style.background = "#ffc107";
-        submitBtn.style.color = "#000";
+        const btn = document.querySelector('.submit-btn');
+        btn.textContent = "変更を上書き保存する";
+        btn.style.background = "linear-gradient(135deg, #fbbf24, #f59e0b)";
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.del = async function(idx) {
-        if (confirm("削除しますか？")) {
-            window.trainRecords.splice(idx, 1);
-            await window.save();
-            updateDisplay();
-        }
+        if (confirm("削除しますか？")) { window.trainRecords.splice(idx, 1); await window.save(); updateDisplay(); }
     };
 
     window.exportData = function() {
         const blob = new Blob([JSON.stringify(window.trainRecords, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'train_records.json';
-        a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'train_records.json'; a.click();
     };
 
     window.importData = async function(e) {
         const reader = new FileReader();
-        reader.onload = async (ev) => {
-            window.trainRecords = JSON.parse(ev.target.result);
-            await window.save();
-            updateDisplay();
-            alert("復旧完了");
-        };
+        reader.onload = async (ev) => { window.trainRecords = JSON.parse(ev.target.result); await window.save(); updateDisplay(); alert("復旧完了"); };
         reader.readAsText(e.target.files[0]);
     };
 
     window.clearAll = async function() {
-        if (confirm("全消去しますか？")) {
-            window.trainRecords = [];
-            await window.save();
-            updateDisplay();
-        }
+        if (confirm("全消去しますか？")) { window.trainRecords = []; await window.save(); updateDisplay(); }
     };
 
-    window.changeRange = function(years) {
-        window.currentRangeYears = years;
-        window.currentEndDate = new Date();
-        updateDisplay();
-    };
-
-    window.movePeriod = function(direction) {
+    window.changeRange = function(y) { window.currentRangeYears = y; window.currentEndDate = new Date(); updateDisplay(); };
+    window.movePeriod = function(d) {
         if (window.currentRangeYears === 0) return;
-        window.currentEndDate.setFullYear(window.currentEndDate.getFullYear() + (direction * window.currentRangeYears));
+        window.currentEndDate.setFullYear(window.currentEndDate.getFullYear() + d * window.currentRangeYears);
         updateDisplay();
     };
 
@@ -566,67 +772,50 @@
         const ctx = document.getElementById('ride-chart').getContext('2d');
         const sorted = [...window.trainRecords].sort((a, b) => new Date(a.date) - new Date(b.date));
         let sum = 0;
-        let allDataPoints = sorted.map(r => { sum += r.ride; return { x: r.date, y: sum }; });
-
-        let displayData = allDataPoints;
+        let all = sorted.map(r => { sum += r.ride; return { x: r.date, y: sum }; });
+        let data = all;
         if (window.currentRangeYears > 0) {
-            const startDate = new Date(window.currentEndDate);
-            startDate.setFullYear(startDate.getFullYear() - window.currentRangeYears);
-            displayData = allDataPoints.filter(p => {
-                const d = new Date(p.x);
-                return d >= startDate && d <= window.currentEndDate;
-            });
-            const startVal = allDataPoints.filter(p => new Date(p.x) < startDate).pop();
-            if (startVal) displayData.unshift({ x: startDate.toISOString().split('T')[0], y: startVal.y });
+            const start = new Date(window.currentEndDate);
+            start.setFullYear(start.getFullYear() - window.currentRangeYears);
+            data = all.filter(p => { const d = new Date(p.x); return d >= start && d <= window.currentEndDate; });
+            const sv = all.filter(p => new Date(p.x) < start).pop();
+            if (sv) data.unshift({ x: start.toISOString().split('T')[0], y: sv.y });
         }
-
         if (window.myChart) window.myChart.destroy();
         window.myChart = new Chart(ctx, {
             type: 'line',
-            data: {
-                datasets: [{
-                    label: '累計(km)',
-                    data: displayData,
-                    borderColor: '#007bff',
-                    fill: true,
-                    backgroundColor: 'rgba(0,123,255,0.1)',
-                    tension: 0.1,
-                    pointRadius: 2
-                }]
-            },
+            data: { datasets: [{ label: '累計(km)', data, borderColor: '#38bdf8', fill: true, backgroundColor: 'rgba(56,189,248,0.08)', tension: 0.3, pointRadius: 2, borderWidth: 2 }] },
             options: {
                 scales: {
-                    x: { type: 'time', time: { unit: 'year' }, display: true },
-                    y: { beginAtZero: false }
+                    x: { type: 'time', time: { unit: 'year' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+                    y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
                 },
                 plugins: { legend: { display: false } }
             }
         });
-        document.getElementById('prev-period').disabled = (window.currentRangeYears === 0);
-        document.getElementById('next-period').disabled = (window.currentRangeYears === 0);
-    }
-
-    function getYearlyData() {
-        const yearly = {};
-        window.trainRecords.forEach(rec => {
-            const year = new Date(rec.date).getFullYear();
-            if (!yearly[year]) yearly[year] = 0;
-            yearly[year] += rec.ride;
-        });
-        return Object.keys(yearly).sort().map(year => ({ year, distance: yearly[year] }));
+        document.getElementById('prev-period').disabled = window.currentRangeYears === 0;
+        document.getElementById('next-period').disabled = window.currentRangeYears === 0;
     }
 
     function updateYearlyChart() {
         const ctx = document.getElementById('yearly-chart').getContext('2d');
-        const data = getYearlyData();
+        const yearly = {};
+        window.trainRecords.forEach(r => { const y = new Date(r.date).getFullYear(); yearly[y] = (yearly[y] || 0) + r.ride; });
+        const data = Object.keys(yearly).sort().map(y => ({ year: y, distance: yearly[y] }));
         if (window.yearlyChart) window.yearlyChart.destroy();
         window.yearlyChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: data.map(d => d.year),
-                datasets: [{ label: '年間乗車距離(km)', data: data.map(d => d.distance) }]
+                datasets: [{ label: '年間乗車距離(km)', data: data.map(d => d.distance), backgroundColor: 'rgba(129,140,248,0.6)', borderColor: '#818cf8', borderWidth: 1, borderRadius: 6 }]
             },
-            options: { scales: { y: { beginAtZero: true } } }
+            options: {
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } },
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b' } }
+                },
+                plugins: { legend: { display: false } }
+            }
         });
     }
 
@@ -634,57 +823,42 @@
         const cont = document.getElementById('full-line-list');
         if (!cont) return;
         cont.innerHTML = "";
-        window.masterLines.forEach((companyData, cIdx) => {
-            let companyTotalDist = 0, companyRiddenDist = 0;
-            companyData.lines.forEach(l => {
-                companyTotalDist += l.dist;
-                const targetName = `${companyData.company} ${l.name}`;
-                const r = window.trainRecords.filter(tr => tr.name === targetName).reduce((s, tr) => s + tr.ride, 0);
-                companyRiddenDist += Math.min(r, l.dist);
+        window.masterLines.forEach((co, cIdx) => {
+            let total = 0, ridden = 0;
+            co.lines.forEach(l => {
+                total += l.dist;
+                const r = window.trainRecords.filter(tr => tr.name === `${co.company} ${l.name}`).reduce((s, tr) => s + tr.ride, 0);
+                ridden += Math.min(r, l.dist);
             });
-
-            const companyPercent = (companyTotalDist > 0) ? (companyRiddenDist / companyTotalDist) * 100 : 0;
+            const pct = total > 0 ? (ridden / total) * 100 : 0;
             const h4 = document.createElement('h4');
             h4.className = "company-title";
-            h4.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                    <span>${companyData.company}</span>
-                    <span style="font-size:13px; color:#555; font-weight:normal;">
-                        ${companyPercent.toFixed(1)}% <small>(${companyRiddenDist.toFixed(1)} / ${companyTotalDist.toFixed(1)} km)</small>
-                    </span>
-                </div>`;
+            h4.innerHTML = `<span>${co.company}</span><small>${pct.toFixed(1)}% (${ridden.toFixed(1)}/${total.toFixed(1)}km)</small>`;
             cont.appendChild(h4);
 
-            companyData.lines.forEach((line, lIdx) => {
-                const targetName = `${companyData.company} ${line.name}`;
-                const history = window.trainRecords.filter(r => r.name === targetName);
-                history.sort((a, b) => new Date(a.date) - new Date(b.date));
-                const ridden = history.reduce((s, r) => s + r.ride, 0);
-                const p = Math.min((ridden / line.dist) * 100, 100);
+            co.lines.forEach((line, lIdx) => {
+                const tname = `${co.company} ${line.name}`;
+                const hist = window.trainRecords.filter(r => r.name === tname).sort((a, b) => new Date(a.date) - new Date(b.date));
+                const rd = hist.reduce((s, r) => s + r.ride, 0);
+                const p = Math.min((rd / line.dist) * 100, 100);
                 const isComplete = p >= 100;
                 const id = `h-${cIdx}-${lIdx}`;
                 const card = document.createElement('div');
                 card.className = "line-card";
-                if (isComplete) card.style.backgroundColor = "#fff9e6";
                 card.innerHTML = `
                     <div onclick="toggleCard('${id}')">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span><strong>${line.name}</strong>${isComplete ? '<span class="badge-complete">完乗済</span>' : ''}</span>
-                            <span style="${isComplete ? 'color:#d4af37; font-weight:bold;' : ''}">${p.toFixed(1)}%</span>
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <span class="line-name">${line.name}${isComplete ? '<span class="badge-complete">完乗済</span>' : ''}</span>
+                            <span class="line-pct${isComplete ? ' complete' : ''}">${p.toFixed(1)}%</span>
                         </div>
-                        <div class="progress-bar-bg" style="height:6px; margin: 4px 0;">
-                            <div class="progress-bar-fill" style="width:${p}%; background:${isComplete ? '#ffd700' : '#28a745'};"></div>
+                        <div class="progress-bar-bg" style="height:4px;margin:6px 0;">
+                            <div class="progress-bar-fill" style="width:${p}%;background:${isComplete ? 'var(--gold)' : 'linear-gradient(90deg,var(--accent),var(--accent2))'}"></div>
                         </div>
-                        <div style="font-size:11px; color:#666; margin-bottom:2px;">
-                            乗車: ${ridden.toFixed(1)}km / 全長: ${line.dist}km
-                        </div>
+                        <div style="font-size:11px;color:var(--text-muted);">${rd.toFixed(1)}km / ${line.dist}km</div>
                     </div>
                     <div id="${id}" class="history-area">
-                        <p style="margin:0 0 5px; font-weight:bold;">乗車履歴:</p>
-                        ${history.length > 0 ? history.map(h => `
-                            <div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding:2px 0;">
-                                <span>${h.date}</span><span>${h.section}</span><span>${h.ride}km</span>
-                            </div>`).join('') : '<p style="margin:0; color:#999;">履歴なし</p>'}
+                        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">乗車履歴</div>
+                        ${hist.length > 0 ? hist.map(h => `<div class="history-row"><span>${h.date}</span><span>${h.section}</span><span>${h.ride}km</span></div>`).join('') : '<div style="color:var(--text-muted);font-size:12px;padding:4px 0;">履歴なし</div>'}
                     </div>`;
                 cont.appendChild(card);
             });
@@ -693,9 +867,8 @@
 
     window.toggleCard = function(id) {
         const el = document.getElementById(id);
-        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
     };
-
 </script>
 </body>
 </html>
