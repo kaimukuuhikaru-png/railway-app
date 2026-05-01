@@ -659,24 +659,33 @@
             const div = document.createElement('div');
             div.style.cssText = `background:${isMe ? 'rgba(56,189,248,0.08)' : 'var(--surface)'};border:1px solid ${isMe ? 'var(--accent)' : 'var(--border)'};border-radius:12px;padding:14px 16px;margin-bottom:8px;cursor:pointer;`;
 
-            // 会社別詳細HTML
-            const companyHTML = (u.companyProgress && u.companyProgress.length > 0)
-                ? u.companyProgress.sort((a, b) => b.percent - a.percent).map(co => `
-                    <div style="margin-bottom:10px;">
-                        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
-                            <span style="font-weight:700;color:var(--accent);">${co.company}</span>
-                            <span style="color:var(--text-muted);">${co.percent.toFixed(1)}% · ${co.ridden.toFixed(1)}km</span>
-                        </div>
-                        <div style="background:var(--surface);height:4px;border-radius:2px;overflow:hidden;margin-bottom:6px;">
-                            <div style="height:100%;width:${co.percent}%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;"></div>
-                        </div>
-                        ${co.lines.map(l => `
-                            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);padding:2px 0;border-bottom:1px solid var(--border);">
-                                <span>${l.name}</span>
-                                <span style="color:${l.percent >= 100 ? 'var(--gold)' : 'var(--text-muted)'};">${l.percent.toFixed(1)}%${l.percent >= 100 ? ' 完乗' : ''}</span>
-                            </div>`).join('')}
-                    </div>`).join('')
-                : '<div style="color:var(--text-muted);font-size:12px;padding:8px 0;">記録なし</div>';
+            // 会社別詳細HTML（ネストを避けるため文字列結合で生成）
+            let companyHTML = '';
+            if (u.companyProgress && u.companyProgress.length > 0) {
+                u.companyProgress.slice().sort((a, b) => b.percent - a.percent).forEach(co => {
+                    let linesHTML = '';
+                    co.lines.forEach(l => {
+                        const lColor = l.percent >= 100 ? 'var(--gold)' : 'var(--text-muted)';
+                        const lLabel = l.percent >= 100 ? ' 完乗' : '';
+                        linesHTML += '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);padding:2px 0;border-bottom:1px solid var(--border);">'
+                            + '<span>' + l.name + '</span>'
+                            + '<span style="color:' + lColor + ';">' + l.percent.toFixed(1) + '%' + lLabel + '</span>'
+                            + '</div>';
+                    });
+                    companyHTML += '<div style="margin-bottom:10px;">'
+                        + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">'
+                        + '<span style="font-weight:700;color:var(--accent);">' + co.company + '</span>'
+                        + '<span style="color:var(--text-muted);">' + co.percent.toFixed(1) + '% · ' + co.ridden.toFixed(1) + 'km</span>'
+                        + '</div>'
+                        + '<div style="background:var(--surface);height:4px;border-radius:2px;overflow:hidden;margin-bottom:6px;">'
+                        + '<div style="height:100%;width:' + co.percent + '%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;"></div>'
+                        + '</div>'
+                        + linesHTML
+                        + '</div>';
+                });
+            } else {
+                companyHTML = '<div style="color:var(--text-muted);font-size:12px;padding:8px 0;">記録なし</div>';
+            }
 
             div.innerHTML = `
                 <div onclick="toggleRankDetail('${detailId}')">
