@@ -639,14 +639,13 @@
                 window.masterLines = data;
                 populateCompanySelect();
                 updateDisplay();
+                // 初回ログイン判定（lines.json読み込み後に実行）
+                const seenKey = 'onboarding_seen_' + user.uid;
+                if (!localStorage.getItem(seenKey)) {
+                    setTimeout(() => openOnboarding(), 300);
+                }
             });
             document.getElementById('ride-date').valueAsDate = new Date();
-
-            // 初回ログイン判定
-            const seenKey = 'onboarding_seen_' + user.uid;
-            if (!localStorage.getItem(seenKey)) {
-                openOnboarding();
-            }
         } else {
             currentUser = null;
             document.getElementById('login-screen').style.display = 'flex';
@@ -820,9 +819,11 @@
     let currentOnboardingStep = 0;
 
     window.openOnboarding = function() {
+        const overlay = document.getElementById('onboarding-overlay');
+        if (!overlay) return;
         currentOnboardingStep = 0;
         updateOnboardingUI();
-        document.getElementById('onboarding-overlay').style.display = 'flex';
+        overlay.style.display = 'flex';
     };
 
     window.closeOnboarding = function() {
@@ -847,23 +848,28 @@
         });
         // ドット生成
         const dots = document.getElementById('onboarding-dots');
-        dots.innerHTML = '';
-        for (let i = 0; i < TOTAL_STEPS; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'onboarding-dot' + (i === currentOnboardingStep ? ' active' : '');
-            dots.appendChild(dot);
+        if (dots) {
+            dots.innerHTML = '';
+            for (let i = 0; i < TOTAL_STEPS; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'onboarding-dot' + (i === currentOnboardingStep ? ' active' : '');
+                dots.appendChild(dot);
+            }
         }
         // ボタンテキスト
         const nextBtn = document.getElementById('onboarding-next-btn');
         const skipBtn = document.querySelector('.onboarding-btn-skip');
-        nextBtn.textContent = currentOnboardingStep === TOTAL_STEPS - 1 ? 'はじめる！' : '次へ →';
-        skipBtn.style.display = currentOnboardingStep === TOTAL_STEPS - 1 ? 'none' : 'block';
+        if (nextBtn) nextBtn.textContent = currentOnboardingStep === TOTAL_STEPS - 1 ? 'はじめる！' : '次へ →';
+        if (skipBtn) skipBtn.style.display = currentOnboardingStep === TOTAL_STEPS - 1 ? 'none' : 'block';
     }
 
-    // オーバーレイ背景クリックで閉じる
-    document.getElementById('onboarding-overlay').addEventListener('click', function(e) {
-        if (e.target === this) closeOnboarding();
-    });
+    // オーバーレイ背景クリックで閉じる（DOM読み込み後に実行）
+    const overlayEl = document.getElementById('onboarding-overlay');
+    if (overlayEl) {
+        overlayEl.addEventListener('click', function(e) {
+            if (e.target === this) closeOnboarding();
+        });
+    }
 
     window.toggleRankDetail = function(id) {
         const el = document.getElementById(id);
