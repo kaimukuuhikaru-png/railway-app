@@ -460,6 +460,11 @@
                 <span class="list-title">最近の記録</span>
                 <input type="text" id="search-input" class="search-input" placeholder="路線を検索..." oninput="updateDisplay()">
             </div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <button onclick="setSortOrder('date-desc')" id="sort-date-desc" class="btn-small" style="color:var(--accent);border-color:var(--accent);">日付▼</button>
+                <button onclick="setSortOrder('date-asc')" id="sort-date-asc" class="btn-small">日付▲</button>
+                <button onclick="setSortOrder('name-asc')" id="sort-name-asc" class="btn-small">路線名順</button>
+            </div>
             <ul id="record-list"></ul>
             <button id="show-all-btn" onclick="toggleShowAll()">すべての記録を表示する</button>
 
@@ -473,10 +478,16 @@
         </div>
 
         <div id="page-view" style="display:none;">
-            <div style="margin-bottom:12px;">
+            <div style="margin-bottom:10px;">
                 <input type="text" id="view-search" placeholder="会社名・路線名を検索..."
                     oninput="renderFullList()"
                     style="border-radius:20px;">
+            </div>
+            <div style="display:flex;gap:6px;margin-bottom:14px;">
+                <button onclick="setViewFilter('all')" id="filter-all" class="btn-small" style="color:var(--accent);border-color:var(--accent);">すべて</button>
+                <button onclick="setViewFilter('ridden')" id="filter-ridden" class="btn-small">乗車済み</button>
+                <button onclick="setViewFilter('complete')" id="filter-complete" class="btn-small">完乗のみ</button>
+                <button onclick="setViewFilter('unridden')" id="filter-unridden" class="btn-small">未乗のみ</button>
             </div>
             <div id="full-line-list"></div>
         </div>
@@ -534,6 +545,8 @@
     window.isShowAll = false;
     window.currentRangeYears = 0;
     window.currentEndDate = new Date();
+    window.sortOrder = 'date-desc';
+    window.viewFilter = 'all';
     let currentUser = null;
     let isRegisterMode = false;
 
@@ -840,6 +853,7 @@
         document.getElementById('ride-to').value = "";
         document.getElementById('ride-section').value = "";
         document.activeElement.blur();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         alert("保存が完了しました！");
     };
 
@@ -878,7 +892,12 @@
 
         let filtered = window.trainRecords.map((r, i) => ({ ...r, originalIndex: i }))
             .filter(r => r.name.toLowerCase().includes(searchVal) || r.section.toLowerCase().includes(searchVal));
-        filtered.reverse();
+
+        // 並び替え
+        if (window.sortOrder === 'date-desc') filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+        else if (window.sortOrder === 'date-asc') filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+        else if (window.sortOrder === 'name-asc') filtered.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+
         const display = !window.isShowAll && searchVal === "" ? filtered.slice(0, 10) : filtered;
 
         display.forEach(rec => {
@@ -909,6 +928,30 @@
     };
 
     window.toggleShowAll = function() { window.isShowAll = !window.isShowAll; updateDisplay(); };
+
+    window.setSortOrder = function(order) {
+        window.sortOrder = order;
+        ['date-desc','date-asc','name-asc'].forEach(o => {
+            const btn = document.getElementById('sort-' + o);
+            if (btn) {
+                btn.style.color = o === order ? 'var(--accent)' : 'var(--text-muted)';
+                btn.style.borderColor = o === order ? 'var(--accent)' : 'var(--border)';
+            }
+        });
+        updateDisplay();
+    };
+
+    window.setViewFilter = function(filter) {
+        window.viewFilter = filter;
+        ['all','ridden','complete','unridden'].forEach(f => {
+            const btn = document.getElementById('filter-' + f);
+            if (btn) {
+                btn.style.color = f === filter ? 'var(--accent)' : 'var(--text-muted)';
+                btn.style.borderColor = f === filter ? 'var(--accent)' : 'var(--border)';
+            }
+        });
+        renderFullList();
+    };
 
     window.edit = function(idx) {
         const rec = window.trainRecords[idx];
@@ -1050,11 +1093,24 @@
         cont.innerHTML = "";
         const searchEl = document.getElementById('view-search');
         const q = searchEl ? searchEl.value.toLowerCase() : '';
+        const filter = window.viewFilter || 'all';
         window.masterLines.forEach((co, cIdx) => {
             // 検索フィルター
             const companyMatch = co.company.toLowerCase().includes(q);
-            const matchedLines = q ? co.lines.filter(l => companyMatch || l.name.toLowerCase().includes(q)) : co.lines;
-            if (q && matchedLines.length === 0) return;
+            let matchedLines = q ? co.lines.filter(l => companyMatch || l.name.toLowerCase().includes(q)) : co.lines;
+
+            // 完乗・未乗フィルター
+            matchedLines = matchedLines.filter(l => {
+                const tname = co.company + ' ' + l.name;
+                const rd = window.trainRecords.filter(tr => tr.name === tname).reduce((s, tr) => s + tr.ride, 0);
+                const p = Math.min((rd / l.dist) * 100, 100);
+                if (filter === 'complete') return p >= 100;
+                if (filter === 'unridden') return rd === 0;
+                if (filter === 'ridden') return rd > 0;
+                return true;
+            });
+
+            if (matchedLines.length === 0) return;
             let total = 0, ridden = 0;
             co.lines.forEach(l => {
                 total += l.dist;
