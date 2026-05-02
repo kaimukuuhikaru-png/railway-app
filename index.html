@@ -340,6 +340,78 @@
         }
         #show-all-btn:hover { border-color: var(--accent); background: var(--accent-glow); }
 
+        /* オンボーディング */
+        #onboarding-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .onboarding-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 32px 28px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+        .onboarding-step { display: none; }
+        .onboarding-step.active { display: block; }
+        .onboarding-icon { font-size: 48px; text-align: center; margin-bottom: 16px; }
+        .onboarding-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--accent);
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .onboarding-text { font-size: 14px; color: var(--text-muted); text-align: center; line-height: 1.7; margin-bottom: 24px; }
+        .onboarding-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+        .onboarding-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+        .onboarding-dot.active { background: var(--accent); }
+        .onboarding-btns { display: flex; gap: 10px; }
+        .onboarding-btn-next {
+            flex: 1;
+            padding: 13px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #0a0f1e;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .onboarding-btn-skip {
+            padding: 13px 16px;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        #help-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        #help-btn:hover { border-color: var(--accent); color: var(--accent); }
+
         #loading { text-align: center; padding: 60px 20px; }
         .loading-dot { display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; margin: 0 4px; animation: pulse 1.2s ease-in-out infinite; }
         .loading-dot:nth-child(2) { animation-delay: 0.2s; background: var(--accent2); }
@@ -380,7 +452,10 @@
 
         <div id="user-bar">
             <span id="user-email-label"></span>
-            <button id="logout-btn" onclick="logout()">ログアウト</button>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button id="help-btn" onclick="openOnboarding()">？</button>
+                <button id="logout-btn" onclick="logout()">ログアウト</button>
+            </div>
         </div>
 
         <div class="progress-section">
@@ -566,6 +641,12 @@
                 updateDisplay();
             });
             document.getElementById('ride-date').valueAsDate = new Date();
+
+            // 初回ログイン判定
+            const seenKey = 'onboarding_seen_' + user.uid;
+            if (!localStorage.getItem(seenKey)) {
+                openOnboarding();
+            }
         } else {
             currentUser = null;
             document.getElementById('login-screen').style.display = 'flex';
@@ -733,6 +814,56 @@
             cont.innerHTML = '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:40px;">まだデータがありません</div>';
         }
     };
+
+    // オンボーディング
+    const TOTAL_STEPS = 5;
+    let currentOnboardingStep = 0;
+
+    window.openOnboarding = function() {
+        currentOnboardingStep = 0;
+        updateOnboardingUI();
+        document.getElementById('onboarding-overlay').style.display = 'flex';
+    };
+
+    window.closeOnboarding = function() {
+        document.getElementById('onboarding-overlay').style.display = 'none';
+        if (currentUser) {
+            localStorage.setItem('onboarding_seen_' + currentUser.uid, '1');
+        }
+    };
+
+    window.nextOnboardingStep = function() {
+        if (currentOnboardingStep < TOTAL_STEPS - 1) {
+            currentOnboardingStep++;
+            updateOnboardingUI();
+        } else {
+            closeOnboarding();
+        }
+    };
+
+    function updateOnboardingUI() {
+        document.querySelectorAll('.onboarding-step').forEach((el, i) => {
+            el.classList.toggle('active', i === currentOnboardingStep);
+        });
+        // ドット生成
+        const dots = document.getElementById('onboarding-dots');
+        dots.innerHTML = '';
+        for (let i = 0; i < TOTAL_STEPS; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'onboarding-dot' + (i === currentOnboardingStep ? ' active' : '');
+            dots.appendChild(dot);
+        }
+        // ボタンテキスト
+        const nextBtn = document.getElementById('onboarding-next-btn');
+        const skipBtn = document.querySelector('.onboarding-btn-skip');
+        nextBtn.textContent = currentOnboardingStep === TOTAL_STEPS - 1 ? 'はじめる！' : '次へ →';
+        skipBtn.style.display = currentOnboardingStep === TOTAL_STEPS - 1 ? 'none' : 'block';
+    }
+
+    // オーバーレイ背景クリックで閉じる
+    document.getElementById('onboarding-overlay').addEventListener('click', function(e) {
+        if (e.target === this) closeOnboarding();
+    });
 
     window.toggleRankDetail = function(id) {
         const el = document.getElementById(id);
