@@ -637,12 +637,12 @@
             await loadNickname(user.uid);
             fetch('lines.json').then(r => r.json()).then(data => {
                 window.masterLines = data;
-                populateCompanySelect();
-                updateDisplay();
+                window.populateCompanySelect();
+                window.updateDisplay();
                 // 初回ログイン判定（lines.json読み込み後に実行）
                 const seenKey = 'onboarding_seen_' + user.uid;
                 if (!localStorage.getItem(seenKey)) {
-                    setTimeout(() => openOnboarding(), 300);
+                    setTimeout(() => window.openOnboarding(), 300);
                 }
             });
             document.getElementById('ride-date').valueAsDate = new Date();
@@ -863,13 +863,10 @@
         if (skipBtn) skipBtn.style.display = currentOnboardingStep === TOTAL_STEPS - 1 ? 'none' : 'block';
     }
 
-    // オーバーレイ背景クリックで閉じる（DOM読み込み後に実行）
-    const overlayEl = document.getElementById('onboarding-overlay');
-    if (overlayEl) {
-        overlayEl.addEventListener('click', function(e) {
-            if (e.target === this) closeOnboarding();
-        });
-    }
+    // オーバーレイ背景クリックで閉じる
+    window.onboardingOverlayClick = function(e) {
+        if (e.target === document.getElementById('onboarding-overlay')) closeOnboarding();
+    };
 
     window.toggleRankDetail = function(id) {
         const el = document.getElementById(id);
